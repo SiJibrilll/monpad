@@ -9,6 +9,8 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use App\Models\Mahasiswa;
+use App\Models\Dosen;
+use App\Models\Asisten;
 
 class User extends Authenticatable
 {
@@ -51,6 +53,14 @@ class User extends Authenticatable
 
     public function mahasiswa_data() {
         return $this->hasOne(Mahasiswa::class);
+    }
+
+    public function dosen_data() {
+        return $this->hasOne(Dosen::class);
+    }
+
+    public function asisten_data() {
+        return $this->hasOne(Asisten::class);
     }
 
     public function scopeMahasiswa($query) {

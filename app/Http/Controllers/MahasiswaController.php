@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreMahasiswaRequest;
 use App\Models\User;
 use App\Http\Resources\MahasiswaResource;
 
@@ -14,23 +15,16 @@ class MahasiswaController extends Controller
     public function index()
     {
         $users = User::mahasiswa()->get();
-        return response()->json(MahasiswaResource::collection($users), 200);
+        return MahasiswaResource::collection($users);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreMahasiswaRequest $request)
     {
-        //
+        return $request->validated();
     }
 
     /**
@@ -38,16 +32,11 @@ class MahasiswaController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $user = User::mahasiswa()->findOrFail($id);
+
+        return new MahasiswaResource($user);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.

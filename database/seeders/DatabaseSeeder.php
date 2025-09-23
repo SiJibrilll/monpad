@@ -50,28 +50,41 @@ class DatabaseSeeder extends Seeder
             // Assign role based on username
             if (str_contains($user->name, 'dosen')) {
                 $user->assignRole('dosen');
-                DB::table('dosen_datas')->insertOrIgnore([
-                    'user_id' => $user->id,
-                    'nidn' => '123456789',
-                    'fakultas' => 'Basis Data',
-                ]);
-            } else if (str_contains($user->name, 'asisten')) {
+
+                // Use Eloquent relationship
+                $user->dosen_data()->updateOrCreate(
+                    ['user_id' => $user->id],
+                    [
+                        'nidn' => '123456789',
+                        'fakultas' => 'Basis Data',
+                    ]
+                );
+
+            } elseif (str_contains($user->name, 'asisten')) {
                 $user->assignRole('asisten');
-                DB::table('asisten_datas')->insertOrIgnore([
-                    'user_id' => $user->id,
-                    'tahun_ajaran' => 2024,
-                ]);
+
+                $user->asisten_data()->updateOrCreate(
+                    ['user_id' => $user->id],
+                    [
+                        'tahun_ajaran' => 2024,
+                    ]
+                );
+
             } else {
                 $user->assignRole('mahasiswa');
-                DB::table('mahasiswa_datas')->insertOrIgnore([
-                    'user_id' => $user->id,
-                    'nim' => '21000123',
-                    'angkatan' => 2021,
-                    'prodi' => 'Informatika',
-                    'jabatan' => 'BE',
-                ]);
+
+                $user->mahasiswa_data()->updateOrCreate(
+                    ['user_id' => $user->id],
+                    [
+                        'nim' => '21000123',
+                        'angkatan' => 2021,
+                        'prodi' => 'Informatika',
+                        'jabatan' => 'BE',
+                    ]
+                );
             }
         }
+
 
         // === PROJECTS ===
         $project = Project::create([
