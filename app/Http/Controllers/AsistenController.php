@@ -62,6 +62,11 @@ class AsistenController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $user = User::find($id);
+        if (!$user) {
+            return response()->json(['message' => 'Asisten Not found'], 404);
+        }
+        $user->delete();
+        return response()->noContent();
     }
 }

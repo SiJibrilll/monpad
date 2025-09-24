@@ -102,15 +102,15 @@ class AsistenControllerTest extends TestCase
     }
 
     /** @test */
-    public function it_can_delete_a_dosen()
+    public function test_it_can_delete_a_asisten()
     {
-        $user = User::dosen()->firstOrFail();
+        $user = User::asisten()->firstOrFail();
 
-        $response = $this->deleteJson("/api/dosen/{$user->id}");
+        $response = $this->deleteJson("/api/asisten/{$user->id}");
 
         $response->assertStatus(204);
 
         $this->assertDatabaseMissing('users', ['id' => $user->id]);
-        $this->assertDatabaseMissing('dosen_datas', ['user_id' => $user->id]);
+        $this->assertDatabaseMissing('asisten_datas', ['user_id' => $user->id]);
     }
 }
