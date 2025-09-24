@@ -23,10 +23,10 @@ class StoreMahasiswaRequest extends FormRequest
     {
         return [
             'name' => 'required|string',
-            'email' => 'required|email',
+            'email' => 'required|email|unique:users',
             'password' => 'required|min:8|confirmed',
 
-            'nim' => 'required|string',
+            'nim' => 'required|string|unique:mahasiswa_datas',
             'angkatan' => 'required|integer',
             'prodi' => 'required|string',
             'jabatan' => 'required|in:PM,UI/UX,BE,FE'

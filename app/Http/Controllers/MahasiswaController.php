@@ -37,7 +37,11 @@ class MahasiswaController extends Controller
      */
     public function show(string $id)
     {
-        $user = User::mahasiswa()->findOrFail($id);
+        $user = User::mahasiswa()->find($id);
+
+        if (!$user) {
+            return response()->json(['message' => "Mahasiswa not found"], 404);
+        }
 
         return new MahasiswaResource($user);
     }
@@ -58,8 +62,11 @@ class MahasiswaController extends Controller
      */
     public function destroy(string $id)
     {
-        $user = User::findOrFail($id);
+        $user = User::find($id);
+        if (!$user) {
+            return response()->json(['message' => 'Mahasiswa Not found'], 404);
+        }
         $user->delete();
-        return response()->json(['message' => 'Mahasiswa deleted successfully'], 204);
+        return response()->noContent();
     }
 }
