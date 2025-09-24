@@ -66,4 +66,12 @@ class User extends Authenticatable
     public function scopeMahasiswa($query) {
         return $query->with('mahasiswa_data')->has('mahasiswa_data');
     }
+
+    public function scopeDosen($query) {
+        return $query->with('dosen_data')->has('dosen_data');
+    }
+
+    public function scopeAsisten($query) {
+        return $query->with('asisten_data')->has('asisten_data');
+    }
 }

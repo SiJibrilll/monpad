@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use App\Models\User;
 
-class UpdateMahasiswaRequest extends FormRequest
+class UpdateDosenRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,17 +22,15 @@ class UpdateMahasiswaRequest extends FormRequest
      */
     public function rules(): array
     {
-        $user = User::with('mahasiswa_data')->findOrFail($this->route('mahasiswa'));
+        $user = User::with('dosen_data')->findOrFail($this->route('dosen'));
 
         return [
             'name' => 'sometimes|string',
             'email' => 'sometimes|email|unique:users,email,' . $user->id,
             'password' => 'nullable|min:8|confirmed',
 
-            'nim' => 'sometimes|string|unique:mahasiswa_datas,nim,' . optional($user->mahasiswa_data)->id,
-            'angkatan' => 'sometimes|integer',
-            'prodi' => 'sometimes|string',
-            'jabatan' => 'sometimes|in:PM,UI/UX,BE,FE',
+            'nidn' => 'sometimes|string|unique:dosen_datas,nidn,' . optional($user->dosen_data)->id,
+            'fakultas' => 'sometimes|string',
         ];
     }
 }
