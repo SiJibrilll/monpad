@@ -84,11 +84,11 @@ class MahasiswaControllerTest extends TestCase
             ]);
 
         $this->assertDatabaseHas('users', ['email' => 'test@example.com']);
-        $this->assertDatabaseHas('mahasiswa_data', ['nim' => '987654321']);
+        $this->assertDatabaseHas('mahasiswa_datas', ['nim' => '987654321']);
     }
 
     /** @test */
-    public function it_can_update_a_mahasiswa()
+    public function test_it_can_update_a_mahasiswa()
     {
         $user = User::mahasiswa()->firstOrFail();
 
@@ -106,11 +106,11 @@ class MahasiswaControllerTest extends TestCase
             ]);
 
         $this->assertDatabaseHas('users', ['id' => $user->id, 'name' => 'Updated Name']);
-        $this->assertDatabaseHas('mahasiswa_data', ['user_id' => $user->id, 'angkatan' => 2024]);
+        $this->assertDatabaseHas('mahasiswa_datas', ['user_id' => $user->id, 'angkatan' => 2024]);
     }
 
     /** @test */
-    public function it_can_delete_a_mahasiswa()
+    public function test_it_can_delete_a_mahasiswa()
     {
         $user = User::mahasiswa()->firstOrFail();
 
@@ -119,6 +119,6 @@ class MahasiswaControllerTest extends TestCase
         $response->assertStatus(204);
 
         $this->assertDatabaseMissing('users', ['id' => $user->id]);
-        $this->assertDatabaseMissing('mahasiswa_data', ['user_id' => $user->id]);
+        $this->assertDatabaseMissing('mahasiswa_datas', ['user_id' => $user->id]);
     }
 }
