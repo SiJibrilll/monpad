@@ -29,7 +29,7 @@ class UpdateAsistenRequest extends FormRequest
             'email' => 'sometimes|email|unique:users,email,' . $user->id,
             'password' => 'nullable|min:8|confirmed',
 
-            'tahun_ajaran' => 'required|int',
+            'tahun_ajaran' => 'required|integer',
         ];
     }
 }

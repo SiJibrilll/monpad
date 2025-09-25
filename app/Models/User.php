@@ -74,4 +74,8 @@ class User extends Authenticatable
     public function scopeAsisten($query) {
         return $query->with('asisten_data')->has('asisten_data');
     }
+
+    function projects() {
+        return $this->hasMany(Project::class, 'user_id');
+    }
 }

@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreAsistenRequest extends FormRequest
+class StoreProjectRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,11 +22,11 @@ class StoreAsistenRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|min:8|confirmed',
-
+            'nama_projek' => 'required|string',
+            'deskripsi' => 'required|string',
+            'semester' => 'required|integer',
             'tahun_ajaran' => 'required|integer',
+            // 'user_id' => 'required|integer|exists:users,id' // keep this if user can make projects for other users
         ];
     }
 }
