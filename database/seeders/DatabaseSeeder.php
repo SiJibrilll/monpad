@@ -92,7 +92,8 @@ class DatabaseSeeder extends Seeder
             'deskripsi' => 'Aplikasi untuk mengelola data kampus',
             'semester' => 5,
             'tahun_ajaran' => '2024',
-            'user_id' => 1, // mahasiswa
+            'user_id' => 1, // dosen PO
+            'asisten_id' => 2
         ]);
 
         // === GROUPS ===

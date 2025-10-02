@@ -11,14 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('projects', function (Blueprint $table) {
+        Schema::create('presences', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_projek');
-            $table->integer('semester');
-            $table->text('deskripsi');
-            $table->integer('tahun_ajaran');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('asisten_id')->constrained('users')->onDelete('cascade');  
             $table->timestamps();
         });
     }
@@ -28,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('projects');
+        Schema::dropIfExists('presences');
     }
 };
