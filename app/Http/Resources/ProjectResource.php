@@ -21,6 +21,7 @@ class ProjectResource extends JsonResource
             'deskripsi' => $this->deskripsi,
             'tahun_ajaran' => $this->tahun_ajaran,
             'owner' => new DosenResource($this->whenLoaded('owner')),
+            'asisten' => new AsistenResource($this->whenLoaded('asisten')),
         ];
     }
 }

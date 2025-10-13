@@ -12,10 +12,15 @@ class Project extends Model
         'semester',
         'deskripsi',
         'tahun_ajaran',
-        'user_id'
+        'user_id',
+        'asisten_id'
     ];
 
     public function owner() {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function asisten() {
+        return $this->belongsTo(User::class, 'asisten_id');
     }
 }

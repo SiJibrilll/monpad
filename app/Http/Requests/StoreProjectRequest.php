@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\isAsisten;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreProjectRequest extends FormRequest
@@ -26,6 +27,7 @@ class StoreProjectRequest extends FormRequest
             'deskripsi' => 'required|string',
             'semester' => 'required|integer',
             'tahun_ajaran' => 'required|integer',
+            'asisten_id' => ['required', 'integer', 'exists:users,id', new isAsisten]
             // 'user_id' => 'required|integer|exists:users,id' // keep this if user can make projects for other users
         ];
     }

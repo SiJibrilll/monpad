@@ -34,6 +34,9 @@ class ProjectControllerTest extends TestCase
                         'owner' => [
                             'username',
                             'nidn'
+                        ],
+                        'asisten' => [
+                            'username'
                         ]
                     ]
                 ]
@@ -65,15 +68,19 @@ class ProjectControllerTest extends TestCase
     public function test_it_can_store_a_new_project()
     {
         $user = User::find(1);
+        $asisten = User::find(2);
 
         // Fake-authenticate this user as Sanctum user with abilities
         Sanctum::actingAs($user, ['*']); // or ->actingAs($user, ['create', 'update'])
+
+        
 
         $payload = [
             'nama_projek'  => 'Sistem bank',
             'deskripsi'    => 'Aplikasi untuk mengelola data bank, anggota, dan peminjaman.',
             'semester'     => 5,
             'tahun_ajaran' => 2025,
+            'asisten_id' => $asisten->id
         ];
 
 
@@ -84,6 +91,9 @@ class ProjectControllerTest extends TestCase
                     'nama_projek' => 'Sistem bank',
                     'owner' => [
                         'id' => $user->id
+                    ],
+                    'asisten' => [
+                        'id' => $asisten->id
                     ]
                 ]
                 

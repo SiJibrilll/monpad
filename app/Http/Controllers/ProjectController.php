@@ -17,7 +17,7 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        $projects = Project::with('owner.dosen_data')->get();
+        $projects = Project::with(['owner.dosen_data', 'asisten.asisten_data'])->get();
 
 
         return ProjectResource::collection($projects);
@@ -29,8 +29,9 @@ class ProjectController extends Controller
     public function store(StoreProjectRequest $request)
     {
         // $project = Project::create($request->validated());
+        // dd($request->validated());
         $project = $request->user()->projects()->create($request->validated());
-        $project->load('owner');
+        $project->load(['owner', 'asisten']);
 
         return new ProjectResource($project);
     }
