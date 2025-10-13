@@ -107,23 +107,23 @@ class DatabaseSeeder extends Seeder
             'group_id' => $group->id,
         ]);
 
-        // === GRADE TYPES ===
-        $gradeTypes = [
-            ['name' => 'Tugas', 'percentage' => 30],
-            ['name' => 'UTS', 'percentage' => 30],
-            ['name' => 'UAS', 'percentage' => 40],
-        ];
+        // // === GRADE TYPES ===
+        // $gradeTypes = [
+        //     ['name' => 'Tugas', 'percentage' => 30],
+        //     ['name' => 'UTS', 'percentage' => 30],
+        //     ['name' => 'UAS', 'percentage' => 40],
+        // ];
 
-        foreach ($gradeTypes as $gt) {
-            GradeType::firstOrCreate($gt);
-        }
+        // foreach ($gradeTypes as $gt) {
+        //     GradeType::firstOrCreate($gt);
+        // }
 
-        // === GRADES ===
-        Grade::create([
-            'user_id' => 3,
-            'project_id' => $project->id,
-            'grade_type_id' => 1,
-            'grade' => 85,
-        ]);
+        // // === GRADES ===
+        // Grade::create([
+        //     'user_id' => 3,
+        //     'project_id' => $project->id,
+        //     'grade_type_id' => 1,
+        //     'grade' => 85,
+        // ]);
     }
 }

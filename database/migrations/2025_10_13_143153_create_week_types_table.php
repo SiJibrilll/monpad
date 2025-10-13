@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('grade_notes', function (Blueprint $table) {
+        Schema::create('week_types', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('writer_id')->constrained('users')->onDelete('cascade');
-            $table->text('note');
+            $table->string('name');
+            $table->integer('percentage');
             $table->timestamps();
         });
     }
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('grade_notes');
+        Schema::dropIfExists('week_types');
     }
 };
