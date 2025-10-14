@@ -115,9 +115,9 @@ class GroupControllerTest extends TestCase
     }
 
     /** @test */
-    public function delete_it_can_delete_a_group()
+    public function test_it_can_delete_a_group()
     {
-        $group = Group::dosen()->firstOrFail();
+        $group = Group::firstOrFail();
 
         $response = $this->deleteJson("/api/group/{$group->id}");
 

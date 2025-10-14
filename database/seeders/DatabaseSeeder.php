@@ -42,6 +42,18 @@ class DatabaseSeeder extends Seeder
                 'email' => 'mhs1@example.com',
                 'password' => Hash::make('password'),
             ],
+            [
+                'id' => 4,
+                'name' => 'mahasiswa2',
+                'email' => 'mhs2@example.com',
+                'password' => Hash::make('password'),
+            ],
+            [
+                'id' => 5,
+                'name' => 'mahasiswa3',
+                'email' => 'mhs3@example.com',
+                'password' => Hash::make('password'),
+            ],
         ];
 
         foreach ($users as $data) {
