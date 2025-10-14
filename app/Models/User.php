@@ -78,4 +78,8 @@ class User extends Authenticatable
     function projects() {
         return $this->hasMany(Project::class, 'user_id');
     }
+
+    function groups() {
+        return $this->belongsToMany(Group::class, 'group_members', 'user_id', 'group_id');
+    }
 }
