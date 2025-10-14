@@ -70,7 +70,7 @@ class GroupMemberControllerTest extends TestCase
 
 
     /** @test */
-    public function test_it_can_delete_a_group()
+    public function test_it_can_detach_a_group_member()
     {
         $group = Group::firstOrFail();
         $member = $group->members()->first();
