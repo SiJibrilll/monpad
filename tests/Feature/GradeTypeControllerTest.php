@@ -96,7 +96,7 @@ class GradeTypeControllerTest extends TestCase
     }
 
     /** @test */
-    public function test_it_can_delete_a_week_type()
+    public function test_it_can_delete_a_grade_type()
     {
         $gradeType = GradeType::first();
 
