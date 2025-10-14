@@ -8,6 +8,7 @@ use App\Http\Controllers\AsistenController;
 use App\Http\Controllers\GroupConctroller;
 use App\Http\Controllers\GroupMemberController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\WeekTypeController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -25,3 +26,5 @@ Route::apiResource('project', ProjectController::class);
 Route::apiResource('group', GroupConctroller::class);
 
 Route::apiResource('group.members', GroupMemberController::class)->only(['index', 'store', 'destroy']);
+
+Route::apiResource('week-type', WeekTypeController::class);

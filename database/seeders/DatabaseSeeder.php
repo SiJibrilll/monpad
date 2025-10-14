@@ -11,6 +11,7 @@ use App\Models\Group;
 use App\Models\Project;
 use App\Models\Grade;
 use App\Models\GradeType;
+use App\Models\WeekType;
 
 class DatabaseSeeder extends Seeder
 {
@@ -118,6 +119,18 @@ class DatabaseSeeder extends Seeder
             'user_id' => 3, // mahasiswa
             'group_id' => $group->id,
         ]);
+
+        // === Week Types ===
+        $weekTypes = [
+            ['name' => 'week 1','percentage' => 10],
+            ['name' => 'week 2','percentage' => 30],
+            ['name' => 'UTS','percentage' => 50],
+            ['name' => 'UAS','percentage' => 90],
+        ];
+
+        foreach ($weekTypes as $type) {
+            WeekType::firstOrCreate($type);
+        }
 
         // // === GRADE TYPES ===
         // $gradeTypes = [
