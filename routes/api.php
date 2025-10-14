@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\DosenController;
 use App\Http\Controllers\AsistenController;
+use App\Http\Controllers\GradeTypeController;
 use App\Http\Controllers\GroupConctroller;
 use App\Http\Controllers\GroupMemberController;
 use App\Http\Controllers\ProjectController;
@@ -28,3 +29,5 @@ Route::apiResource('group', GroupConctroller::class);
 Route::apiResource('group.members', GroupMemberController::class)->only(['index', 'store', 'destroy']);
 
 Route::apiResource('week-type', WeekTypeController::class);
+
+Route::apiResource('grade-type', GradeTypeController::class);

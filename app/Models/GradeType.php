@@ -6,5 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class GradeType extends Model
 {
-    //
+    protected $fillable = [
+        'name',
+        'percentage'
+    ];
 }

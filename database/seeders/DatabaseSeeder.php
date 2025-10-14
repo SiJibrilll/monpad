@@ -132,6 +132,17 @@ class DatabaseSeeder extends Seeder
             WeekType::firstOrCreate($type);
         }
 
+        // === Week Types ===
+        $gradeTypes = [
+            ['name' => 'kerapihan','percentage' => 10],
+            ['name' => 'estetika','percentage' => 30],
+            ['name' => 'kecepatan','percentage' => 50],
+        ];
+
+        foreach ($gradeTypes as $type) {
+            GradeType::firstOrCreate($type);
+        }
+
         // // === GRADE TYPES ===
         // $gradeTypes = [
         //     ['name' => 'Tugas', 'percentage' => 30],
