@@ -11,10 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('presence_rules', function (Blueprint $table) {
-            $table->id();
-            $table->integer("minimum");
-            $table->timestamps();
+        Schema::table('presence_rules', function (Blueprint $table) {
+            $table->foreignId('week_type_id')->constrained()->onDelete('cascade');
         });
     }
 
@@ -23,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('presence_rules');
+        Schema::table('presence_rules', function (Blueprint $table) {
+            //
+        });
     }
 };
