@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\WeekTypeResource;
+use App\Models\GradeType;
 use App\Models\WeekType;
 use Illuminate\Http\Request;
 
@@ -13,7 +14,7 @@ class WeekTypeController extends Controller
      */
     public function index()
     {
-        $weekTypes = WeekType::all();
+        $weekTypes = WeekType::with('gradeType')->get();
 
         return WeekTypeResource::collection($weekTypes);
     }
@@ -25,10 +26,16 @@ class WeekTypeController extends Controller
     {
         $validated = $request->validate([
             'name' => ['required', 'string', 'unique:week_types,name'],
-            'percentage' => ['required', 'integer']
+            'percentage' => ['required', 'integer'],
+            'grade_types' => ['required', 'array'],
+            'grade_types.*' => ['integer', 'exists:grade_types,id']
         ]);
 
         $weekType = WeekType::create($validated);
+
+        $weekType->gradeType()->sync($validated['grade_types']);
+
+        $weekType->load('gradeType');
 
         return new WeekTypeResource($weekType);
     }
@@ -48,11 +55,15 @@ class WeekTypeController extends Controller
     {
         $validated = $request->validate([
             'name' => ['sometimes', 'string', 'unique:week_types,name,' . $weekType->id],
-            'percentage' => ['sometimes', 'integer']
+            'percentage' => ['sometimes', 'integer'],
+            'grade_types' => ['sometimes', 'array'],
+            'grade_types.*' => ['sometimes', 'exists:grade_types,id']
         ]);
 
         $weekType->update($validated);
+        $weekType->gradeType()->sync($validated['grade_types']);
         $weekType->refresh();
+        $weekType->load('gradeType');
 
         return new WeekTypeResource($weekType);
     }

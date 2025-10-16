@@ -121,18 +121,6 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // === Week Types ===
-        $weekTypes = [
-            ['name' => 'week 1','percentage' => 10],
-            ['name' => 'week 2','percentage' => 30],
-            ['name' => 'UTS','percentage' => 50],
-            ['name' => 'UAS','percentage' => 90],
-        ];
-
-        foreach ($weekTypes as $type) {
-            WeekType::firstOrCreate($type);
-        }
-
-        // === Week Types ===
         $gradeTypes = [
             ['name' => 'kerapihan','percentage' => 10],
             ['name' => 'estetika','percentage' => 30],
@@ -143,23 +131,18 @@ class DatabaseSeeder extends Seeder
             GradeType::firstOrCreate($type);
         }
 
-        // // === GRADE TYPES ===
-        // $gradeTypes = [
-        //     ['name' => 'Tugas', 'percentage' => 30],
-        //     ['name' => 'UTS', 'percentage' => 30],
-        //     ['name' => 'UAS', 'percentage' => 40],
-        // ];
+        // === Week Types ===
+        $weekTypes = [
+            ['name' => 'week 1','percentage' => 10],
+            ['name' => 'week 2','percentage' => 30],
+            ['name' => 'UTS','percentage' => 50],
+            ['name' => 'UAS','percentage' => 90],
+        ];
 
-        // foreach ($gradeTypes as $gt) {
-        //     GradeType::firstOrCreate($gt);
-        // }
+        foreach ($weekTypes as $type) {
+            $weekType = WeekType::firstOrCreate($type);
+            $weekType->gradeType()->sync([2, 1]);
+        }
 
-        // // === GRADES ===
-        // Grade::create([
-        //     'user_id' => 3,
-        //     'project_id' => $project->id,
-        //     'grade_type_id' => 1,
-        //     'grade' => 85,
-        // ]);
     }
 }

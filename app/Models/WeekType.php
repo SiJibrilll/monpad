@@ -10,4 +10,8 @@ class WeekType extends Model
         'name',
         'percentage'
     ];
+
+    function gradeType() {
+        return $this->belongsToMany(GradeType::class, 'week_type_grade_type');
+    }
 }

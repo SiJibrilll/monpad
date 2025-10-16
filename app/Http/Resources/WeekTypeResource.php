@@ -17,7 +17,8 @@ class WeekTypeResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'percentage' => $this->percentage
+            'percentage' => $this->percentage,
+            'grade_types' => GradeTypeResource::collection($this->whenLoaded('gradeType'))
         ];
     }
 }

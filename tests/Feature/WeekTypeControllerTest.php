@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\GradeType;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\WeekType;
@@ -30,7 +31,13 @@ class WeekTypeControllerTest extends TestCase
                     '*' => [
                         'id',
                         'name',
-                        'percentage'
+                        'percentage',
+                        'grade_types' => [
+                            "*" => [
+                                'name',
+                                'percentage'
+                            ]
+                        ]
                     ]
                 ]
             ]);
@@ -40,8 +47,10 @@ class WeekTypeControllerTest extends TestCase
     public function test_it_can_show_a_single_week_type()
     {
         $weekType = WeekType::firstOrFail();
+        $gradeType = $weekType->gradeType()->first();
 
         $response = $this->getJson("/api/week-type/{$weekType->id}");
+
 
         $response->assertStatus(200)
             ->assertJson([
@@ -49,17 +58,23 @@ class WeekTypeControllerTest extends TestCase
                     'id' => $weekType->id,
                     'name' => $weekType->name,
                     'percentage' => $weekType->percentage,
-                    
                 ]
+            ]);
+        
+            $response->assertJsonFragment([
+                'id' => $gradeType->id
             ]);
     }
 
     /** @test */
     public function test_it_can_store_a_new_week_type()
     {
+        $gradeType = GradeType::first();
+
         $payload = [
             'name' => 'Ujian Triwulasan',
             'percentage' => 60,
+            'grade_types' => [$gradeType->id]
         ];
 
         $response = $this->postJson('/api/week-type', $payload);
@@ -68,19 +83,23 @@ class WeekTypeControllerTest extends TestCase
             ->assertJsonFragment([
                 'name' => $payload['name'],
                 'percentage' => $payload['percentage'],
+                'id' => $gradeType->id
             ]);
 
         $this->assertDatabaseHas('week_types', ['name' => $payload['name'], 'percentage' => $payload['percentage']]);
+        $this->assertDatabaseHas('week_type_grade_type', ['grade_type_id' => $gradeType->id, 'week_type_id' => $response->json('data.id')]);
     }
 
     /** @test */
     public function test_it_can_update_a_week_type()
     {
         $weekType = WeekType::first();
+        $gradeType = GradeType::skip(1)->take(1)->first();
 
         $payload = [
             'name' => 'Ujian baratayuda',
             'percentage' => 60,
+            'grade_types' => [$gradeType->id]
         ];
 
         $response = $this->putJson("/api/week-type/{$weekType->id}", $payload);
@@ -89,9 +108,11 @@ class WeekTypeControllerTest extends TestCase
             ->assertJsonFragment([
                 'name' => $payload['name'],
                 'percentage' => $payload['percentage'],
+                'id' => $gradeType->id
             ]);
 
         $this->assertDatabaseHas('week_types', ['id' => $weekType->id, 'name' => $payload['name'], 'percentage' => $payload['percentage']]);
+        $this->assertDatabaseHas('week_type_grade_type', ['grade_type_id' => $gradeType->id, 'week_type_id' => $response->json('data.id')]);
     }
 
     /** @test */
@@ -99,10 +120,14 @@ class WeekTypeControllerTest extends TestCase
     {
         $weekType = WeekType::first();
 
+        $gradeType = $weekType->gradeType()->first();
+
         $response = $this->deleteJson("/api/week-type/{$weekType->id}");
 
         $response->assertStatus(204);
 
         $this->assertDatabaseMissing('week_types', ['id' => $weekType->id]);
+        $this->assertDatabaseMissing('week_type_grade_type', ['week_type_id' => $weekType->id, 'grade_type_id' => $gradeType->id]);
+
     }
 }
