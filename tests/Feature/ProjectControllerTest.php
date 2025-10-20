@@ -141,7 +141,7 @@ class ProjectControllerTest extends TestCase
     }
 
     /** @test */
-    public function test_it_can_delete_a_project()
+    public function test_it_cannot_delete_a_project_owned_by_a_group()
     {
         $user = User::find(1);
         $project = $user->projects()->first();
@@ -150,7 +150,33 @@ class ProjectControllerTest extends TestCase
         Sanctum::actingAs($user, ['*']); // or ->actingAs($user, ['create', 'update'])
 
 
-        $response = $this->deleteJson("/api/dosen/{$project->id}");
+        $response = $this->deleteJson("/api/project/{$project->id}");
+
+        $response->assertStatus(409);
+
+        $this->assertDatabaseHas('projects', ['id' => $project->id]);
+        
+    }
+
+    /** @test */
+    public function test_it_can_delete_a_project()
+    {
+        $data = [
+            'nama_projek'  => 'Sistem rudal',
+            'deskripsi'    => 'Sistem pengendali rudal',
+            'semester'     => 5,
+            'tahun_ajaran' => 2025,
+            'asisten_id' => 2
+        ];
+
+        $user = User::find(1);
+        $project = $user->projects()->create($data);
+
+        // Fake-authenticate this user as Sanctum user with abilities
+        Sanctum::actingAs($user, ['*']); // or ->actingAs($user, ['create', 'update'])
+
+
+        $response = $this->deleteJson("/api/project/{$project->id}");
 
         $response->assertStatus(204);
 

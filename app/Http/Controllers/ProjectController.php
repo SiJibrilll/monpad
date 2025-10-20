@@ -75,6 +75,10 @@ class ProjectController extends Controller
         if (!$project) {
             return response()->json(['message' => 'Project Not found'], 404);
         }
+        if ($project->group()->exists()) {
+            return response()->json(['message' => "Project cannot be deleted because it is tied to a group"], 409);
+        }
+        
         $project->delete();
         return response()->noContent();
     }

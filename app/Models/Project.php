@@ -23,4 +23,8 @@ class Project extends Model
     public function asisten() {
         return $this->belongsTo(User::class, 'asisten_id');
     }
+
+    public function group() {
+        return $this->hasOne(Group::class, 'project_id');
+    }
 }
