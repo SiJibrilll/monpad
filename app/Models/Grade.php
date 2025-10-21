@@ -12,4 +12,8 @@ class Grade extends Model
         'week_id',
         'grade_type_id',
     ];
+
+    function gradeType() {
+        return $this->belongsTo(GradeType::class);
+    }
 }

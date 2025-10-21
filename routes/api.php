@@ -9,6 +9,7 @@ use App\Http\Controllers\GradeTypeController;
 use App\Http\Controllers\GroupConctroller;
 use App\Http\Controllers\GroupMemberController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\WeekController;
 use App\Http\Controllers\WeekTypeController;
 
 Route::get('/user', function (Request $request) {
@@ -31,3 +32,5 @@ Route::apiResource('group.members', GroupMemberController::class)->only(['index'
 Route::apiResource('week-type', WeekTypeController::class);
 
 Route::apiResource('grade-type', GradeTypeController::class);
+
+Route::apiResource('week', WeekController::class);

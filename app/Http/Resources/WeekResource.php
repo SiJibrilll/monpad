@@ -16,7 +16,7 @@ class WeekResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'grader' => new AsistenResource($this->whenLoaded('asisten')),
+            'grader' => new AsistenResource($this->whenLoaded('grader')),
             'project_id' => $this->project_id,
             'date' => $this->date,
             'week_type' => new WeekTypeResource($this->whenLoaded('weekType')),

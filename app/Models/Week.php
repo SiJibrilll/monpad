@@ -15,8 +15,8 @@ class Week extends Model
         'week_type_id'
     ];
 
-    function asisten() {
-        return $this->belongsTo(User::class, 'asisten_id');
+    function grader() {
+        return $this->belongsTo(User::class, 'grader_id');
     }
 
     function grades() {

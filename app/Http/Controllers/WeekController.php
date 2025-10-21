@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\WeekResource;
+use App\Models\Week;
 use Illuminate\Http\Request;
 
 class WeekController extends Controller
@@ -11,7 +13,9 @@ class WeekController extends Controller
      */
     public function index()
     {
-        //
+        $weeks = Week::with(['grader', 'grades.gradeType', 'weekType'])->get();
+
+        return WeekResource::collection($weeks);
     }
 
     /**
@@ -25,9 +29,10 @@ class WeekController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Week $week)
     {
-        //
+        $week->load(['grader', 'grades.gradeType', 'weekType']);
+        return new WeekResource($week);
     }
 
     /**
