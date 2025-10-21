@@ -19,10 +19,12 @@ class isAsisten implements ValidationRule
 
         if (!$user) {
             $fail('user not found');
+            return;
         }
 
         if (!$user->hasRole('asisten')) {
             $fail('user must be an asisten');
+            return;
         }
     }
 }

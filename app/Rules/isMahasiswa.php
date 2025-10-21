@@ -20,10 +20,12 @@ class isMahasiswa implements ValidationRule
 
         if (!$user) {
             $fail('user not found');
+            return;
         }
 
         if (!$user->hasRole('mahasiswa')) {
             $fail('user must be an mahasiswa');
+            return;
         }
     }
 }

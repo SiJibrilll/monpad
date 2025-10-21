@@ -55,6 +55,7 @@ class StoreWeekRequest extends FormRequest
             }
 
             $allowedIds = $weekType->gradeType->pluck('id')->toArray();
+            $providedIds = collect($grades)->pluck('grade_type_id')->toArray();
 
             foreach ($grades as $index => $gradeData) {
                 if (!in_array($gradeData['grade_type_id'], $allowedIds)) {
@@ -63,6 +64,21 @@ class StoreWeekRequest extends FormRequest
                         'This grade type is not valid for the selected week type.'
                     );
                 }
+            }
+
+            
+            $missing = array_diff($allowedIds, $providedIds);
+
+            if (!empty($missing)) {
+                $missingNames = $weekType->gradeType
+                    ->whereIn('id', $missing)
+                    ->pluck('name')
+                    ->implode(', ');
+
+                $validator->errors()->add(
+                    'grades',
+                    "Missing required grades: {$missingNames}."
+                );
             }
         });
     }
