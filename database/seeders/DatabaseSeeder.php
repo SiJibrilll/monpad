@@ -11,6 +11,7 @@ use App\Models\Group;
 use App\Models\Project;
 use App\Models\Grade;
 use App\Models\GradeType;
+use App\Models\Week;
 use App\Models\WeekType;
 
 class DatabaseSeeder extends Seeder
@@ -142,6 +143,25 @@ class DatabaseSeeder extends Seeder
         foreach ($weekTypes as $type) {
             $weekType = WeekType::firstOrCreate($type);
             $weekType->gradeType()->sync([2, 1]);
+        }
+
+        $weekType = WeekType::first();
+        $asisten = User::find(2);
+        $gradeTypes = $weekType->gradeType;
+
+        $week = Week::create([
+            'grader_id' => $asisten->id,
+            'date' => now(),
+            'project_id' => $project->id,
+            'week_type_id' => $weekType->id,
+            'notes' => "kurang rapih"
+        ]);
+
+        foreach ($gradeTypes as $gradeType) {
+            $week->grades()->create([
+                'grade_type_id' => $gradeType->id,
+                'grade' => 100
+            ]);
         }
 
     }
