@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('grader_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('project_id')->constrained('projects')->onDelete('cascade');
             $table->date('date');
+            $table->text('notes');
             $table->foreignId('week_type_id')->constrained('week_types')->onDelete('cascade');
             $table->timestamps();
         });
