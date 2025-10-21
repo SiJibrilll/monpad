@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\GradeCalculator;
 use Illuminate\Database\Eloquent\Model;
 
 class Week extends Model
@@ -29,5 +30,10 @@ class Week extends Model
 
     function weekType() {
         return $this->belongsTo(WeekType::class);
+    }
+
+    function totalGrade() {
+        $calculator = new GradeCalculator;
+        return $calculator->calculateWeekTotal($this);
     }
 }
