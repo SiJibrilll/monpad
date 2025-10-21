@@ -2,9 +2,11 @@
 
 namespace Tests\Feature;
 
+use App\Models\Project;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Week;
+use App\Models\WeekType;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class WeekControllerTest extends TestCase
@@ -75,62 +77,86 @@ class WeekControllerTest extends TestCase
     }
 
     /** @test */
-    public function it_can_store_a_new_dosen()
+    public function test_it_can_store_a_new_week()
     {
+        $grader = User::asisten()->first();
+        $project = Project::first();
+        $weekType = WeekType::first();
+
         $payload = [
-            'name' => 'Test Dosen',
-            'email' => 'test@example.com',
-            'password' => 'password123',
-            'password_confirmation' => 'password123',
-            'nidn' => '987654321',
-            'fakultas' => 'jawa',
+            'notes' => 'Kurang rapih',
+            'grader_id' => $grader->id,
+            'date' => now(),
+            'week_type_id' => $weekType->id,
+            'grades' => [
+                ['grade_type_id' => 1, 'grade' => 100],
+                ['grade_type_id' => 2, 'grade' => 50]
+            ],
+            'project_id' => $project->id,
+            
         ];
 
-        $response = $this->postJson('/api/dosen', $payload);
-
+        $response = $this->postJson('/api/week', $payload);
+        
         $response->assertStatus(201)
             ->assertJsonFragment([
-                'username' => 'Test Dosen',
-                'email' => 'test@example.com',
-                'nidn' => '987654321',
+                'notes' => $payload['notes'],
+                'username' => $grader->name,
+                'grade' => 100,
+                'name' => $weekType->name
             ]);
 
-        $this->assertDatabaseHas('users', ['email' => 'test@example.com']);
-        $this->assertDatabaseHas('dosen_datas', ['nidn' => '987654321']);
+        $this->assertDatabaseHas('weeks', ['notes' => $payload['notes']]);
+        $this->assertDatabaseHas('grades', ['grade_type_id' => $payload['grades'][0]['grade_type_id'], 'grade' => $payload['grades'][0]['grade']]);
     }
 
     /** @test */
-    public function it_can_update_a_dosen()
+    public function test_it_can_update_a_week_and_grade()
     {
-        $user = User::dosen()->firstOrFail();
+        $week = Week::first();
+
+        $grader = User::asisten()->first();
+        $project = Project::first();
+        $weekType = WeekType::first();
 
         $payload = [
-            'name' => 'Updated Name',
-            'fakultas' => 'Inggris',
+            'notes' => 'Udah keren',
+            'grader_id' => $grader->id,
+            'date' => now(),
+            'week_type_id' => $weekType->id,
+            'grades' => [
+                ['grade_type_id' => 1, 'grade' => 10],
+                ['grade_type_id' => 2, 'grade' => 100]
+            ],
+            'project_id' => $project->id,
+            
         ];
 
-        $response = $this->putJson("/api/dosen/{$user->id}", $payload);
+        $response = $this->putJson("/api/week/{$week->id}", $payload);
 
         $response->assertStatus(200)
             ->assertJsonFragment([
-                'username' => 'Updated Name',
-                'fakultas' => 'Inggris',
+                'notes' => $payload['notes'],
+                'username' => $grader->name,
+                'grade' => 100,
+                'name' => $weekType->name
             ]);
 
-        $this->assertDatabaseHas('users', ['id' => $user->id, 'name' => 'Updated Name']);
-        $this->assertDatabaseHas('dosen_datas', ['user_id' => $user->id, 'fakultas' => 'Inggris']);
+        $this->assertDatabaseHas('weeks', ['notes' => $payload['notes']]);
+        $this->assertDatabaseHas('grades', ['grade_type_id' => $payload['grades'][0]['grade_type_id'], 'grade' => $payload['grades'][0]['grade']]);
     }
 
     /** @test */
-    public function it_can_delete_a_dosen()
+    public function test_it_can_delete_a_week_and_grade()
     {
-        $user = User::dosen()->firstOrFail();
+        $week = Week::firstOrFail();
+        $grade = $week->grades()->first();
 
-        $response = $this->deleteJson("/api/dosen/{$user->id}");
+        $response = $this->deleteJson("/api/week/{$week->id}");
 
         $response->assertStatus(204);
 
-        $this->assertDatabaseMissing('users', ['id' => $user->id]);
-        $this->assertDatabaseMissing('dosen_datas', ['user_id' => $user->id]);
+        $this->assertDatabaseMissing('weeks', ['id' => $week->id]);
+        $this->assertDatabaseMissing('grades', ['id' => $grade->id]);
     }
 }
