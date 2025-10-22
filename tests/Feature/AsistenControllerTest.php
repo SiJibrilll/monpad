@@ -98,7 +98,7 @@ class AsistenControllerTest extends TestCase
                 'username' => 'Updated Name',
                 'tahun_ajaran' => 2024,
             ]);
-        $response->dump();
+        
 
         $this->assertDatabaseHas('users', ['id' => $user->id, 'name' => 'Updated Name']);
         $this->assertDatabaseHas('asisten_datas', ['user_id' => $user->id, 'tahun_ajaran' => 2024, 'nim' => $payload['nim']]);
