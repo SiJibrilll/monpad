@@ -27,6 +27,7 @@ class StoreAsistenRequest extends FormRequest
             'password' => 'required|min:8|confirmed',
 
             'tahun_ajaran' => 'required|integer',
+            'nim' => 'required|string|unique:asisten_datas',
         ];
     }
 }

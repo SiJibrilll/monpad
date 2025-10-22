@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')
                 ->constrained()
-                ->onDelete('cascade'); 
+                ->onDelete('cascade');
+            $table->string('nim'); 
             $table->integer('tahun_ajaran');
             $table->timestamps();
         });

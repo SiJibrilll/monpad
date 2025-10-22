@@ -49,7 +49,7 @@ class AsistenControllerTest extends TestCase
                     'id' => $user->id,
                     'username' => $user->name,
                     'email' => $user->email,
-                    'tahun_ajaran' => $user->asisten_data->tahun_ajaran
+                    'tahun_ajaran' => $user->asisten_data->tahun_ajaran,
                     
                 ]
             ]);
@@ -64,6 +64,7 @@ class AsistenControllerTest extends TestCase
             'password' => 'password123',
             'password_confirmation' => 'password123',
             'tahun_ajaran' => 2024,
+            'nim' => 'aehfuahfueahf'
         ];
 
         $response = $this->postJson('/api/asisten', $payload);
@@ -87,6 +88,7 @@ class AsistenControllerTest extends TestCase
         $payload = [
             'name' => 'Updated Name',
             'tahun_ajaran' => 2024,
+            'nim' => '127172331'
         ];
 
         $response = $this->putJson("/api/asisten/{$user->id}", $payload);
@@ -96,9 +98,10 @@ class AsistenControllerTest extends TestCase
                 'username' => 'Updated Name',
                 'tahun_ajaran' => 2024,
             ]);
+        $response->dump();
 
         $this->assertDatabaseHas('users', ['id' => $user->id, 'name' => 'Updated Name']);
-        $this->assertDatabaseHas('asisten_datas', ['user_id' => $user->id, 'tahun_ajaran' => 2024]);
+        $this->assertDatabaseHas('asisten_datas', ['user_id' => $user->id, 'tahun_ajaran' => 2024, 'nim' => $payload['nim']]);
     }
 
     /** @test */

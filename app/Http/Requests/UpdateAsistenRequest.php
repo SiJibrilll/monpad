@@ -30,6 +30,7 @@ class UpdateAsistenRequest extends FormRequest
             'password' => 'nullable|min:8|confirmed',
 
             'tahun_ajaran' => 'required|integer',
+            'nim' => 'sometimes|string|unique:asisten_datas,nim,' . optional($user->asisten_data)->id,
         ];
     }
 }

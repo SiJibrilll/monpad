@@ -19,6 +19,7 @@ class AsistenResource extends JsonResource
             'username' => $this->name,
             'email' => $this->email,
             'tahun_ajaran' => $this->asisten_data->tahun_ajaran,
+            'nim' => $this->asisten_data->nim
         ];
     }
 }

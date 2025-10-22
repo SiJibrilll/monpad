@@ -81,6 +81,7 @@ class DatabaseSeeder extends Seeder
                     ['user_id' => $user->id],
                     [
                         'tahun_ajaran' => 2024,
+                        'nim' => '12/1238/12312311'
                     ]
                 );
 

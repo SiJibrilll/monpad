@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
 
 class Asisten extends Model
 {
@@ -11,17 +12,22 @@ class Asisten extends Model
 
     protected $fillable = [
         'tahun_ajaran',
-        'user_id'
+        'user_id',
+        'nim'
     ];
 
     static function createAsisten($data) {
         
+        $user = DB::transaction(function () use ($data) {
+            $userData = Arr::only($data, ['name', 'email', 'password']);
+            $asistenData = Arr::only($data, ['tahun_ajaran', 'nim']);
 
-        $userData = Arr::only($data, ['name', 'email', 'password']);
-        $asistenData = Arr::only($data, ['tahun_ajaran']);
+            $user = User::create($userData);
+            $user->asisten_data()->create($asistenData);
 
-        $user = User::create($userData);
-        $user->asisten_data()->create($asistenData);
+            return $user;
+        });
+        
         return $user;
     }
 
@@ -29,7 +35,7 @@ class Asisten extends Model
         
 
         $userData = Arr::only($data, ['name', 'email', 'password']);
-        $asistenData = Arr::only($data, ['tahun_ajaran']);
+        $asistenData = Arr::only($data, ['tahun_ajaran', 'nim']);
 
         $user = User::findOrFail($id);
         $user->update($userData);
