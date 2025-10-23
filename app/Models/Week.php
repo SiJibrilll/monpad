@@ -36,4 +36,8 @@ class Week extends Model
         $calculator = new GradeCalculator;
         return $calculator->calculateWeekTotal($this);
     }
+
+    function review() {
+        return $this->hasOne(GradeNote::class);
+    }
 }

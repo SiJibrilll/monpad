@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\DosenController;
 use App\Http\Controllers\AsistenController;
+use App\Http\Controllers\GradeNoteController;
 use App\Http\Controllers\GradeTypeController;
 use App\Http\Controllers\GroupConctroller;
 use App\Http\Controllers\GroupMemberController;
@@ -34,3 +35,5 @@ Route::apiResource('week-type', WeekTypeController::class);
 Route::apiResource('grade-type', GradeTypeController::class);
 
 Route::apiResource('week', WeekController::class);
+
+Route::apiResource('grade-note', GradeNoteController::class);

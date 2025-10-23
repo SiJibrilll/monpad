@@ -165,5 +165,12 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
+        $dosen = User::dosen()->first();
+
+        $week->review()->create([
+            'note' => 'Nilainya harusnya bagus menurut saya',
+            'writer_id' => $dosen->id, 
+        ]);
+
     }
 }

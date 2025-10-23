@@ -22,7 +22,8 @@ class WeekResource extends JsonResource
             'week_type' => new WeekTypeResource($this->whenLoaded('weekType')),
             'notes' => $this->notes,
             'total_grade' => $this->totalGrade(),
-            'grades' => GradeResource::collection($this->whenLoaded('grades'))
+            'grades' => GradeResource::collection($this->whenLoaded('grades')),
+            'review' => new GradeNoteResource($this->whenLoaded('review'))
         ];
     }
 }
