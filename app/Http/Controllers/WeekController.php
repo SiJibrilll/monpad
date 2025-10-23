@@ -17,6 +17,7 @@ class WeekController extends Controller
     {
         $weeks = Week::with(['grader', 'grades.gradeType', 'weekType', 'review.writer'])->get();
 
+
         return WeekResource::collection($weeks);
     }
 
@@ -43,7 +44,7 @@ class WeekController extends Controller
      */
     public function show(Week $week)
     {
-        $week->load(['grader', 'grades.gradeType', 'weekType']);
+        $week->load(['grader', 'grades.gradeType', 'weekType', 'review.writer']);
         return new WeekResource($week);
     }
 

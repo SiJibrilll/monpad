@@ -36,4 +36,4 @@ Route::apiResource('grade-type', GradeTypeController::class);
 
 Route::apiResource('week', WeekController::class);
 
-Route::apiResource('grade-note', GradeNoteController::class);
+Route::apiResource('week.review', GradeNoteController::class);
