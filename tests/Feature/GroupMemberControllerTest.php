@@ -79,6 +79,6 @@ class GroupMemberControllerTest extends TestCase
 
         $response->assertStatus(200);
 
-        $this->assertDatabaseMissing('group_members', ['id' => $member->id]);
+        $this->assertDatabaseMissing('group_members', ['user_id' => $member->id]);
     }
 }
