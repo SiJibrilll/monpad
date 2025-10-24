@@ -9,6 +9,7 @@ use App\Http\Controllers\GradeNoteController;
 use App\Http\Controllers\GradeTypeController;
 use App\Http\Controllers\GroupConctroller;
 use App\Http\Controllers\GroupMemberController;
+use App\Http\Controllers\PresenceController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\WeekController;
 use App\Http\Controllers\WeekTypeController;
@@ -37,3 +38,5 @@ Route::apiResource('grade-type', GradeTypeController::class);
 Route::apiResource('week', WeekController::class);
 
 Route::apiResource('week.review', GradeNoteController::class);
+
+Route::get('group/{group}/weekly-presence/{weekType}', [PresenceController::class, 'index']);

@@ -122,6 +122,16 @@ class DatabaseSeeder extends Seeder
             'group_id' => $group->id,
         ]);
 
+        DB::table('group_members')->insert([
+            'user_id' => 4, // mahasiswa
+            'group_id' => $group->id,
+        ]);
+
+        DB::table('group_members')->insert([
+            'user_id' => 5, // mahasiswa
+            'group_id' => $group->id,
+        ]);
+
         // === Week Types ===
         $gradeTypes = [
             ['name' => 'kerapihan','percentage' => 10],

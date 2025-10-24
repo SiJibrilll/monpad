@@ -11,12 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('presences', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->date('date');
-            $table->boolean('present')->default(false);
-            $table->timestamps();
+        Schema::table('presences', function (Blueprint $table) {
+            $table->foreignId('week_type_id')->constrained()->onDelete('cascade');
+            $table->foreignId('group_id')->constrained()->onDelete('cascade');
         });
     }
 
@@ -25,6 +22,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('presences');
+        Schema::table('presences', function (Blueprint $table) {
+            Schema::dropIfExists('presences');
+        });
     }
 };
