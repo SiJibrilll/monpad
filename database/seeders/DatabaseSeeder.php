@@ -182,5 +182,7 @@ class DatabaseSeeder extends Seeder
             'writer_id' => $dosen->id, 
         ]);
 
+        
+
     }
 }

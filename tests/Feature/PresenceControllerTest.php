@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\GradeType;
 use App\Models\Group;
+use App\Models\Presence;
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\WeekType;
@@ -29,110 +30,50 @@ class PresenceControllerTest extends TestCase
 
         $response = $this->getJson("/api/group/{$group->id}/weekly-presence/{$weekType->id}");
 
-        $response->dump();
-        // $response->assertStatus(200)
-        //     ->assertJsonStructure([
-        //         'data' => [
-        //             '*' => [
-        //                 'id',
-        //                 'name',
-        //                 'percentage',
-        //                 'grade_types' => [
-        //                     "*" => [
-        //                         'name',
-        //                         'percentage'
-        //                     ]
-        //                 ]
-        //             ]
-        //         ]
-        //     ]);
-    }
-
-    /** @test */
-    public function it_can_show_a_single_week_type()
-    {
-        $weekType = WeekType::firstOrFail();
-        $gradeType = $weekType->gradeType()->first();
-
-        $response = $this->getJson("/api/week-type/{$weekType->id}");
-
-
         $response->assertStatus(200)
-            ->assertJson([
+            ->assertJsonStructure([
                 'data' => [
-                    'id' => $weekType->id,
-                    'name' => $weekType->name,
-                    'percentage' => $weekType->percentage,
+                    '*' => [
+                        'presence_id',
+                        'week_id',
+                        'group_id',
+                        'mahasiswa' => [
+                            'username',
+                            'nim'
+                        ]
+                    ]
                 ]
             ]);
-        
-            $response->assertJsonFragment([
-                'id' => $gradeType->id
-            ]);
     }
 
     /** @test */
-    public function it_can_store_a_new_week_type()
+    public function test_it_can_update_a_presence_for_a_group()
     {
-        $gradeType = GradeType::first();
-
-        $payload = [
-            'name' => 'Ujian Triwulasan',
-            'percentage' => 60,
-            'grade_types' => [$gradeType->id]
-        ];
-
-        $response = $this->postJson('/api/week-type', $payload);
-
-        $response->assertStatus(201)
-            ->assertJsonFragment([
-                'name' => $payload['name'],
-                'percentage' => $payload['percentage'],
-                'id' => $gradeType->id
-            ]);
-
-        $this->assertDatabaseHas('week_types', ['name' => $payload['name'], 'percentage' => $payload['percentage']]);
-        $this->assertDatabaseHas('week_type_grade_type', ['grade_type_id' => $gradeType->id, 'week_type_id' => $response->json('data.id')]);
-    }
-
-    /** @test */
-    public function it_can_update_a_week_type()
-    {
+        $group = Group::first();
         $weekType = WeekType::first();
-        $gradeType = GradeType::skip(1)->take(1)->first();
+
+        $this->getJson("/api/group/{$group->id}/weekly-presence/{$weekType->id}");
+        
+        $presences = Presence::where('group_id', $group->id)
+        ->where('week_type_id', $weekType->id)
+        ->get();
 
         $payload = [
-            'name' => 'Ujian baratayuda',
-            'percentage' => 60,
-            'grade_types' => [$gradeType->id]
+            'presences' => []
         ];
 
-        $response = $this->putJson("/api/week-type/{$weekType->id}", $payload);
+        foreach ($presences as $presence) {
+            $payload['presences'][] = ["presence_id" => $presence->id, 'present' => true];
+        }
 
+        $response = $this->putJson("/api/group/{$group->id}/weekly-presence/{$weekType->id}", $payload);
+
+        $test = $payload['presences'][0];
         $response->assertStatus(200)
             ->assertJsonFragment([
-                'name' => $payload['name'],
-                'percentage' => $payload['percentage'],
-                'id' => $gradeType->id
+                'present' => $test['present'],
             ]);
 
-        $this->assertDatabaseHas('week_types', ['id' => $weekType->id, 'name' => $payload['name'], 'percentage' => $payload['percentage']]);
-        $this->assertDatabaseHas('week_type_grade_type', ['grade_type_id' => $gradeType->id, 'week_type_id' => $response->json('data.id')]);
-    }
-
-    /** @test */
-    public function it_can_delete_a_week_type()
-    {
-        $weekType = WeekType::first();
-
-        $gradeType = $weekType->gradeType()->first();
-
-        $response = $this->deleteJson("/api/week-type/{$weekType->id}");
-
-        $response->assertStatus(204);
-
-        $this->assertDatabaseMissing('week_types', ['id' => $weekType->id]);
-        $this->assertDatabaseMissing('week_type_grade_type', ['week_type_id' => $weekType->id, 'grade_type_id' => $gradeType->id]);
-
+        $this->assertDatabaseHas('presences', ['id' => $test['presence_id'], 'present' => $test['present']]);
     }
 }

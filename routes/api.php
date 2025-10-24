@@ -39,4 +39,6 @@ Route::apiResource('week', WeekController::class);
 
 Route::apiResource('week.review', GradeNoteController::class);
 
+// presence feature
 Route::get('group/{group}/weekly-presence/{weekType}', [PresenceController::class, 'index']);
+Route::put('group/{group}/weekly-presence/{weekType}', [PresenceController::class, 'update']);
