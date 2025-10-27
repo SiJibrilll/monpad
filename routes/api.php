@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\DosenController;
 use App\Http\Controllers\AsistenController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\GradeNoteController;
 use App\Http\Controllers\GradeTypeController;
 use App\Http\Controllers\GroupConctroller;
@@ -14,10 +15,10 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\WeekController;
 use App\Http\Controllers\WeekTypeController;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
+// auth routes
+Route::post('login', [AuthController::class, 'login']);
 
+Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
 Route::apiResource('mahasiswa', MahasiswaController::class);
 
