@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Laravel\Sanctum\Sanctum;
 
 class DosenControllerTest extends TestCase
 {
@@ -16,6 +17,11 @@ class DosenControllerTest extends TestCase
 
         // Seed the database with dummy data
         $this->seed();
+
+        $user = User::find(1);
+         
+        // Fake-authenticate this user as Sanctum user with abilities
+        Sanctum::actingAs($user, ['*']); // or ->actingAs($user, ['create', 'update'])
     }
 
     /** @test */

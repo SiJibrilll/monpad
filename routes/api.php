@@ -22,6 +22,7 @@ Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanct
 
 Route::middleware(['auth:sanctum'])->group(function () {
     
+    // -- dosen features
     Route::middleware(['role:dosen'])->group(function () {
 
         Route::apiResource('mahasiswa', MahasiswaController::class);
@@ -40,25 +41,22 @@ Route::middleware(['auth:sanctum'])->group(function () {
         
         Route::apiResource('grade-type', GradeTypeController::class);
 
+        Route::apiResource('week.review', GradeNoteController::class);
 
-        Route::middleware(['role:asisten|dosen'])->group(function () {
-            Route::apiResource('week', WeekController::class);
-            
-            Route::apiResource('week.review', GradeNoteController::class);
-        });
-
-        Route::middleware(['role:asisten'])->group(function () {
-            // presence feature
-            Route::get('group/{group}/weekly-presence/{weekType}', [PresenceController::class, 'index']);
-            Route::put('group/{group}/weekly-presence/{weekType}', [PresenceController::class, 'update']);
-        });        
+        
     });
-    
-    
-    
-    
-    
-    
+
+    // -- asisten/dosen features
+    Route::middleware(['role:asisten|dosen'])->group(function () {
+        Route::apiResource('week', WeekController::class);
+    });
+
+    // -- asisten features
+    Route::middleware(['role:asisten'])->group(function () {
+        // presence feature
+        Route::get('group/{group}/weekly-presence/{weekType}', [PresenceController::class, 'index']);
+        Route::put('group/{group}/weekly-presence/{weekType}', [PresenceController::class, 'update']);
+    });
     
     
 });
