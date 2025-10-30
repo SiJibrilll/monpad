@@ -20,26 +20,45 @@ Route::post('login', [AuthController::class, 'login']);
 
 Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
-Route::apiResource('mahasiswa', MahasiswaController::class);
+Route::middleware(['auth:sanctum'])->group(function () {
+    
+    Route::middleware(['role:dosen'])->group(function () {
 
-Route::apiResource('dosen', DosenController::class);
+        Route::apiResource('mahasiswa', MahasiswaController::class);
 
-Route::apiResource('asisten', AsistenController::class);
+        Route::apiResource('dosen', DosenController::class);
+        
+        Route::apiResource('asisten', AsistenController::class);
+        
+        Route::apiResource('project', ProjectController::class);
+        
+        Route::apiResource('group', GroupConctroller::class);
+        
+        Route::apiResource('group.members', GroupMemberController::class)->only(['index', 'store', 'destroy']);
 
-Route::apiResource('project', ProjectController::class);
+        Route::apiResource('week-type', WeekTypeController::class);
+        
+        Route::apiResource('grade-type', GradeTypeController::class);
 
-Route::apiResource('group', GroupConctroller::class);
 
-Route::apiResource('group.members', GroupMemberController::class)->only(['index', 'store', 'destroy']);
+        Route::middleware(['role:asisten|dosen'])->group(function () {
+            Route::apiResource('week', WeekController::class);
+            
+            Route::apiResource('week.review', GradeNoteController::class);
+        });
 
-Route::apiResource('week-type', WeekTypeController::class);
-
-Route::apiResource('grade-type', GradeTypeController::class);
-
-Route::apiResource('week', WeekController::class);
-
-Route::apiResource('week.review', GradeNoteController::class);
-
-// presence feature
-Route::get('group/{group}/weekly-presence/{weekType}', [PresenceController::class, 'index']);
-Route::put('group/{group}/weekly-presence/{weekType}', [PresenceController::class, 'update']);
+        Route::middleware(['role:asisten'])->group(function () {
+            // presence feature
+            Route::get('group/{group}/weekly-presence/{weekType}', [PresenceController::class, 'index']);
+            Route::put('group/{group}/weekly-presence/{weekType}', [PresenceController::class, 'update']);
+        });        
+    });
+    
+    
+    
+    
+    
+    
+    
+    
+});
