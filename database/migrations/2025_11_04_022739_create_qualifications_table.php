@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('qualifications', function (Blueprint $table) {
             $table->id();
             $table->foreignId('group_member_id')->constrained()->onDelete('cascade');
+            $table->foreignId('grader_id')->constrained('users')->onDelete('cascade');
             $table->text('notes');
             $table->timestamps();
         });

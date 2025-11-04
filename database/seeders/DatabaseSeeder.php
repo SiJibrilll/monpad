@@ -11,6 +11,7 @@ use App\Models\Group;
 use App\Models\Project;
 use App\Models\Grade;
 use App\Models\GradeType;
+use App\Models\PersonalGradeType;
 use App\Models\Week;
 use App\Models\WeekType;
 
@@ -54,6 +55,12 @@ class DatabaseSeeder extends Seeder
                 'id' => 5,
                 'name' => 'mahasiswa3',
                 'email' => 'mhs3@example.com',
+                'password' => Hash::make('password'),
+            ],
+            [
+                'id' => 6,
+                'name' => 'mahasiswa4',
+                'email' => 'mhs4@example.com',
                 'password' => Hash::make('password'),
             ],
         ];
@@ -182,7 +189,10 @@ class DatabaseSeeder extends Seeder
             'writer_id' => $dosen->id, 
         ]);
 
-        
+        // personal grade type seeder
+        PersonalGradeType::create(['name' => 'kekreatifan']);
+        PersonalGradeType::create(['name' => 'kerajinan']);
+        PersonalGradeType::create(['name' => 'ketaatan']);
 
     }
 }
