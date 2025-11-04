@@ -2,17 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StorePersonalGradeRequest;
+use Illuminate\Http\Request;
+use App\Http\Requests\StoreQualificationRequest;
 use App\Models\Group;
-use App\Models\PersonalGrade;
 use App\Models\Qualification;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class PersonelGradingController extends Controller
+class QualificationController extends Controller
 {
-    function store(StorePersonalGradeRequest $request, Group $group, User $member) {
+    function store(StoreQualificationRequest $request, Group $group, User $member) {
         $validated = $request->validated();
         $grader = $request->user();
 

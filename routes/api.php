@@ -10,12 +10,11 @@ use App\Http\Controllers\GradeNoteController;
 use App\Http\Controllers\GradeTypeController;
 use App\Http\Controllers\GroupConctroller;
 use App\Http\Controllers\GroupMemberController;
-use App\Http\Controllers\PersonelGradingController;
 use App\Http\Controllers\PresenceController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\QualificationController;
 use App\Http\Controllers\WeekController;
 use App\Http\Controllers\WeekTypeController;
-use Faker\Provider\ar_EG\Person;
 
 // auth routes
 Route::post('login', [AuthController::class, 'login']);
@@ -62,7 +61,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::middleware(['role:mahasiswa'])->group(function () {
 
-         Route::post('/group/{group}/members/{member}/qualification', [PersonelGradingController::class, 'store']);
+         Route::post('/group/{group}/members/{member}/qualification', [QualificationController::class, 'store']);
     });
     
     

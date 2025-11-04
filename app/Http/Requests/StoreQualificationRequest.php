@@ -2,10 +2,9 @@
 
 namespace App\Http\Requests;
 
-use App\Models\PersonalGradeType;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StorePersonalGradeRequest extends FormRequest
+class StoreQualificationRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

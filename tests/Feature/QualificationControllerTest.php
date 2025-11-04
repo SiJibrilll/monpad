@@ -9,7 +9,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Sanctum\Sanctum;
 
-class PersonalGradeControllerTest extends TestCase
+class QualificationControllerTest extends TestCase
 {
     use RefreshDatabase;
 
