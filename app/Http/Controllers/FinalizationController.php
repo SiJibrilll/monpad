@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\GradeFinalizationResource;
+use App\Models\GradeFinalization;
+use App\Models\Project;
 use App\Models\User;
 use App\Models\Week;
 use App\Services\PresenceRuleValidator;
@@ -14,10 +17,13 @@ class FinalizationController extends Controller
      */
     public function index()
     {
-        $user = User::mahasiswa()->first();
-        $week = Week::with('weekType.presenceRule')->find(2);
-        $presenceValidator = new PresenceRuleValidator;
-        dd($presenceValidator->isValidPresenceAmount($user, $week));
+        // $user = User::mahasiswa()->first();
+        // $week = Week::with('weekType.presenceRule')->find(2);
+        // $presenceValidator = new PresenceRuleValidator;
+        // $project = Project::first();
+        // dd($project->finalGrade());
+        $finalizations = GradeFinalization::with(['user.mahasiswa_data', 'user.presences', 'project.weeks', 'project.group'])->get();
+        return GradeFinalizationResource::collection($finalizations);
     }
 
     /**
@@ -28,7 +34,7 @@ class FinalizationController extends Controller
         //
     }
 
-    /**
+    /*
      * Display the specified resource.
      */
     public function show(string $id)

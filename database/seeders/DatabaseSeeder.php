@@ -10,8 +10,10 @@ use App\Models\User;
 use App\Models\Group;
 use App\Models\Project;
 use App\Models\Grade;
+use App\Models\GradeFinalization;
 use App\Models\GradeType;
 use App\Models\PersonalGradeType;
+use App\Models\Presence;
 use App\Models\Week;
 use App\Models\WeekType;
 
@@ -164,6 +166,7 @@ class DatabaseSeeder extends Seeder
         }
 
         $weekType = WeekType::first();
+        $secondWeekType = WeekType::find(2);
         $asisten = User::find(2);
         $gradeTypes = $weekType->gradeType;
 
@@ -175,10 +178,27 @@ class DatabaseSeeder extends Seeder
             'notes' => "kurang rapih"
         ]);
 
+        $week2 = Week::create([
+            'grader_id' => $asisten->id,
+            'date' => now(),
+            'project_id' => $project->id,
+            'week_type_id' => $secondWeekType->id,
+            'notes' => "mulai keren"
+        ]);
+
+        
+
         foreach ($gradeTypes as $gradeType) {
             $week->grades()->create([
                 'grade_type_id' => $gradeType->id,
-                'grade' => 100
+                'grade' => 20
+            ]);
+        }
+
+        foreach ($gradeTypes as $gradeType) {
+            $week2->grades()->create([
+                'grade_type_id' => $gradeType->id,
+                'grade' => 80
             ]);
         }
 
@@ -195,9 +215,12 @@ class DatabaseSeeder extends Seeder
         PersonalGradeType::create(['name' => 'ketaatan']);
 
         // to test presence rule
-        
+        $uastype = WeekType::find(4);
+        $uastype->presenceRule()->create(['minimum' => 5]);
         $ruledWeek = WeekType::find(3);
-        $ruledWeek->presenceRule()->create(['minimum' => 5]);
+        $ruledWeek->presenceRule()->create(['minimum' => 2]);
+
+        $gradeTypes = $ruledWeek->gradeType;
         $testWeek = Week::create([
             'grader_id' => $asisten->id,
             'date' => now(),
@@ -205,5 +228,50 @@ class DatabaseSeeder extends Seeder
             'week_type_id' => $ruledWeek->id,
             'notes' => "nilai untuk uts"
         ]);
+
+        $uas = Week::create([
+            'grader_id' => $asisten->id,
+            'date' => now(),
+            'project_id' => $project->id,
+            'week_type_id' => $uastype->id,
+            'notes' => "nilai untuk uts"
+        ]);
+
+        foreach ($gradeTypes as $gradeType) {
+            $testWeek->grades()->create([
+                'grade_type_id' => $gradeType->id,
+                'grade' => 100
+            ]);
+        }
+
+        foreach ($gradeTypes as $gradeType) {
+            $uas->grades()->create([
+                'grade_type_id' => $gradeType->id,
+                'grade' => 50
+            ]);
+        }
+
+        //making one of the mahasiswa have presence:
+        $weekTypes = WeekType::all();
+        $mahasiswa = User::find(3);
+        foreach ($weekTypes as $weekType) {
+            Presence::create([
+                'present' => true,
+                'user_id' => $mahasiswa->id,
+                'week_type_id' => $weekType->id,
+                'date' => now(),
+                'group_id' => $group->id
+            ]);
+        }
+
+        // creating a grade_finalization record
+        $mahasiswas = User::mahasiswa()->get();
+        foreach ($mahasiswas as $mahasiswa) {
+            GradeFinalization::create([
+                'confirmed' => false,
+                'project_id' => $project->id,
+                'user_id' => $mahasiswa->id
+            ]);
+        }
     }
 }
