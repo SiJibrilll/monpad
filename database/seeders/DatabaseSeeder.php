@@ -194,5 +194,16 @@ class DatabaseSeeder extends Seeder
         PersonalGradeType::create(['name' => 'kerajinan']);
         PersonalGradeType::create(['name' => 'ketaatan']);
 
+        // to test presence rule
+        
+        $ruledWeek = WeekType::find(3);
+        $ruledWeek->presenceRule()->create(['minimum' => 5]);
+        $testWeek = Week::create([
+            'grader_id' => $asisten->id,
+            'date' => now(),
+            'project_id' => $project->id,
+            'week_type_id' => $ruledWeek->id,
+            'notes' => "nilai untuk uts"
+        ]);
     }
 }

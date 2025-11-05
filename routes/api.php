@@ -6,6 +6,7 @@ use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\DosenController;
 use App\Http\Controllers\AsistenController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\FinalizationController;
 use App\Http\Controllers\GradeNoteController;
 use App\Http\Controllers\GradeTypeController;
 use App\Http\Controllers\GroupConctroller;
@@ -66,3 +67,5 @@ Route::middleware(['auth:sanctum'])->group(function () {
     
     
 });
+
+Route::apiResource('/finalization', FinalizationController::class);
