@@ -7,6 +7,7 @@ use App\Models\Project;
 use Tests\TestCase;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Laravel\Sanctum\Sanctum;
 
 class GroupMemberControllerTest extends TestCase
 {
@@ -18,6 +19,10 @@ class GroupMemberControllerTest extends TestCase
 
         // Seed the database with dummy data
         $this->seed();
+         $user = User::find(1);
+         
+        // Fake-authenticate this user as Sanctum user with abilities
+        Sanctum::actingAs($user, ['*']); // or ->actingAs($user, ['create', 'update'])
     }
 
     /** @test */

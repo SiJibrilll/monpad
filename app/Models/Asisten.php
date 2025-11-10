@@ -24,6 +24,7 @@ class Asisten extends Model
 
             $user = User::create($userData);
             $user->asisten_data()->create($asistenData);
+            $user->assignRole('asisten');
 
             return $user;
         });

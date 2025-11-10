@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Week;
 use App\Models\WeekType;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Laravel\Sanctum\Sanctum;
 
 class WeekControllerTest extends TestCase
 {
@@ -19,6 +20,11 @@ class WeekControllerTest extends TestCase
 
         // Seed the database with dummy data
         $this->seed();
+
+        $user = User::find(1);
+         
+        // Fake-authenticate this user as Sanctum user with abilities
+        Sanctum::actingAs($user, ['*']); // or ->actingAs($user, ['create', 'update'])
     }
 
     /** @test */

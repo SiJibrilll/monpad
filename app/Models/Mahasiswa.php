@@ -25,6 +25,8 @@ class Mahasiswa extends Model
 
         $user = User::create($userData);
         $user->mahasiswa_data()->create($mahasiswaData);
+        $user->assignRole('mahasiswa');
+        
         return $user;
     }
 

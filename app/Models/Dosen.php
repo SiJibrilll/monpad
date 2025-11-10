@@ -23,6 +23,8 @@ class Dosen extends Model
 
         $user = User::create($userData);
         $user->dosen_data()->create($dosenData);
+        $user->assignRole('dosen');
+        
         return $user;
     }
 

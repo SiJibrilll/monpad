@@ -18,6 +18,9 @@ class ProjectControllerTest extends TestCase
 
         // Seed the database with dummy data
         $this->seed();
+         $user = User::find(1);
+        // Fake-authenticate this user as Sanctum user with abilities
+        Sanctum::actingAs($user, ['*']); // or ->actingAs($user, ['create', 'update'])
     }
 
     /** @test */
