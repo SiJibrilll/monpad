@@ -6,16 +6,25 @@ use Closure;
 use Illuminate\Http\Request;
 use App\Models\Concerns\Finalizable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
+
+ 
 
 class CheckNotFinalized
 {
     public function handle(Request $request, Closure $next)
     {
+        // Log::info('PreventIfFinalized triggered', [
+        //     'method' => $request->method(),
+        //     'route_params' => $request->route()->parameters(),
+        //     'body' => $request->all(),
+        // ]);
+
         // Skip read-only requests entirely
         if (in_array($request->method(), ['GET', 'HEAD', 'OPTIONS'])) {
             return $next($request);
         }
-        
+
         // 1️⃣ Check all route-bound models
         foreach ($request->route()->parameters() as $param) {
             if ($this->isModelFinalized($param)) {

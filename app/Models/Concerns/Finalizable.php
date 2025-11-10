@@ -22,7 +22,9 @@ trait Finalizable
         $source = $this->getFinalizationSource();
 
         if (method_exists($source, 'finalizations')) {
-            return $source->finalizations->contains('confirmed', true);
+            // Always fetch fresh relation to avoid stale or unloaded data
+            $finalizations = $source->finalizations()->get();
+            return $finalizations->contains('confirmed', true);
         }
 
         if (property_exists($source, 'is_finalized')) {

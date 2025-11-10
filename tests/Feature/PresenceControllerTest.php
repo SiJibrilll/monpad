@@ -121,9 +121,9 @@ class PresenceControllerTest extends TestCase
 
         // we skip to 1 because user 0 has presences on seeder for finalize grade testing
         $test = $payload['presences'][1];
-        $response->assertStatus(422)
+        $response->assertStatus(403)
             ->assertJsonFragment([
-                'message' => 'Grade is already final'
+                'message' => 'This record is finalized.'
             ]);
 
         $this->assertDatabaseMissing('presences', ['id' => $test['presence_id'], 'present' => $test['present']]);

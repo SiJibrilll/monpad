@@ -60,13 +60,12 @@ class MahasiswaController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(User $mahasiswa)
     {
-        $user = User::find($id);
-        if (!$user) {
+        if (!$mahasiswa) {
             return response()->json(['message' => 'Mahasiswa Not found'], 404);
         }
-        $user->delete();
+        $mahasiswa->delete();
         return response()->noContent();
     }
 }

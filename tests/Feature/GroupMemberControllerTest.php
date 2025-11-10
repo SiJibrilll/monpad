@@ -117,9 +117,9 @@ class GroupMemberControllerTest extends TestCase
 
         $response = $this->postJson("/api/group/{$group->id}/members", $payload);
 
-        $response->assertStatus(422)
+       $response->assertStatus(403)
             ->assertJsonFragment([
-                'message' => 'Grade is already final'
+                'message' => 'This record is finalized.'
             ]);
 
         $this->assertDatabaseMissing('group_members', ['user_id' => $user1->id, 'group_id' => $group->id]);
@@ -142,9 +142,9 @@ class GroupMemberControllerTest extends TestCase
 
         $response = $this->deleteJson("/api/group/{$group->id}/members/{$member->id}");
 
-        $response->assertStatus(422)
+        $response->assertStatus(403)
             ->assertJsonFragment([
-                'message' => 'Grade is already final'
+                'message' => 'This record is finalized.'
             ]);
 
         $this->assertDatabaseHas('group_members', ['user_id' => $member->id]);

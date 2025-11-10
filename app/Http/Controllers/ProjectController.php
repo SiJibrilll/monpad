@@ -69,9 +69,9 @@ class ProjectController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Request $request, string $id)
+    public function destroy(Request $request, Project $project)
     {
-        $project = $request->user()->projects()->find($id);
+        
         if (!$project) {
             return response()->json(['message' => 'Project Not found'], 404);
         }

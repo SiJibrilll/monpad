@@ -92,9 +92,7 @@ class User extends Authenticatable
         return $this->hasMany(Presence::class);
     }
 
-    public function getFinalizationSource()
-    {
-        // By default, assume the model itself has finalizations
-        return $this->projects;
+    function finalizations() {
+        return $this->hasMany(GradeFinalization::class);
     }
 }

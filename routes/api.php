@@ -68,6 +68,4 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
          Route::post('/group/{group}/members/{member}/qualification', [QualificationController::class, 'store'])->middleware('not_finalized');
     });
-    
-    
 });

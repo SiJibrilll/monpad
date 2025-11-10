@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\GradeFinalization;
 use Tests\TestCase;
 use App\Models\Project;
 use App\Models\User;
@@ -160,6 +161,32 @@ class ProjectControllerTest extends TestCase
         $this->assertDatabaseHas('projects', ['id' => $project->id]);
         
     }
+
+    // /** @test */
+    // public function test_it_cannot_delete_a_finalized_project()
+    // {
+    //     $user = User::find(1);
+    //     $project = $user->projects()->first();
+
+    //     // Fake-authenticate this user as Sanctum user with abilities
+    //     Sanctum::actingAs($user, ['*']); // or ->actingAs($user, ['create', 'update'])
+
+    //     $finalization = GradeFinalization::where('project_id', $project->id)->first();
+    //     $result = $this->postJson("/api/finalization/{$finalization->id}");
+
+    //     $this->assertDatabaseHas('grade_finalizations', ['id' => $finalization->id, 'project_id' => $project->id, 'confirmed' => true]);
+
+
+    //     $response = $this->deleteJson("/api/project/{$project->id}");
+
+    //     $response->assertStatus(403)
+    //     ->assertJsonFragment([
+    //         'message' => 'This record is finalized.'
+    //     ]);
+
+    //     $this->assertDatabaseHas('projects', ['id' => $project->id]);
+        
+    // }
 
     /** @test */
     public function test_it_can_delete_a_project()
