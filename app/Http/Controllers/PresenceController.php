@@ -57,6 +57,12 @@ class PresenceController extends Controller
     {
         $validated = $request->validated();
 
+        if ($group->project->finalizations->contains('confirmed', true)) {
+            return response()->json([
+                'message' => 'Grade is already final'
+            ], 422);
+        }
+
         foreach ($validated['presences'] as $presence) {
             Presence::find($presence['presence_id'])->update(['present' => $presence['present']]);
         }

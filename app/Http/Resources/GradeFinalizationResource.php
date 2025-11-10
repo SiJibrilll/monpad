@@ -15,14 +15,13 @@ class GradeFinalizationResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'user' => new MahasiswaResource($this->whenLoaded('users.mahasiswa_data')),
-            'group' => '',
-            'member_grade' => '',
+            'user' => new MahasiswaResource($this->whenLoaded('user')),
+            'group' => new GroupResource($this->whenLoaded('users.memberShip.group')),
+            'member_grade' => $this->memberGrade(),
             'project_grade' => $this->projectGrade(),
             'personal_grade' => $this->personalGrade($this->user_id),
-            'final_grade' => '',
-            'confirmed' => ''
-
+            'final_grade' => $this->finalGrade(),
+            'confirmed' => $this->confirmed
         ];
     }
 }

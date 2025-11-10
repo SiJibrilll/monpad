@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\GradeFinalizationResource;
 use App\Models\GradeFinalization;
+use App\Models\PersonalGradeType;
 use App\Models\Project;
 use App\Models\User;
 use App\Models\Week;
@@ -17,44 +18,17 @@ class FinalizationController extends Controller
      */
     public function index()
     {
-        // $user = User::mahasiswa()->first();
-        // $week = Week::with('weekType.presenceRule')->find(2);
-        // $presenceValidator = new PresenceRuleValidator;
-        // $project = Project::first();
-        // dd($project->finalGrade());
-        $finalizations = GradeFinalization::with(['user.mahasiswa_data', 'user.presences', 'project.weeks', 'project.group'])->get();
+
+        $finalizations = GradeFinalization::with(['user.mahasiswa_data', 'user.presences', 'user.groups', 'user.memberShip.qualifications.grades', 'project.weeks', 'project.group'])->get();
         return GradeFinalizationResource::collection($finalizations);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+    function finalize(GradeFinalization $finalization) {
+        $finalization->confirmed = true;
+        $finalization->update();
 
-    /*
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return response()->json([
+            'message' => 'Grade Finalized Sucessfully'
+        ], 200);
     }
 }

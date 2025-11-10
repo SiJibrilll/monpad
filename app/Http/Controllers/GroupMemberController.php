@@ -22,8 +22,22 @@ class GroupMemberController extends Controller
             'user_id.*' => ['integer', 'exists:users,id', new isMahasiswa]
         ]);
 
+        if ($group->project->finalizations->contains('confirmed', true)) {
+            return response()->json([
+                'message' => 'Grade is already final'
+            ], 422);
+        }
+
         $group->members()->sync($validated['user_id']);
         $group->refresh();
+
+        //create finalization record
+        foreach ($validated['user_id'] as $userId) {
+            $group->project->finalizations()->create([
+                'user_id' => $userId,
+            ]);
+        }
+
 
         $members = $group->members()->with('mahasiswa_data')->get();
 
@@ -38,7 +52,14 @@ class GroupMemberController extends Controller
             ], 404);
         }
 
+        if ($group->project->finalizations->contains('confirmed', true)) {
+            return response()->json([
+                'message' => 'Grade is already final'
+            ], 422);
+        }
+
         $group->members()->detach($member->id);
+        $group->project->finalizations()->find($member->id)->first()->delete();
 
         return response()->json([
             'message' => 'Member removed successfully.'

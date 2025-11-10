@@ -14,6 +14,7 @@ use App\Models\GradeFinalization;
 use App\Models\GradeType;
 use App\Models\PersonalGradeType;
 use App\Models\Presence;
+use App\Models\Qualification;
 use App\Models\Week;
 use App\Models\WeekType;
 
@@ -214,6 +215,34 @@ class DatabaseSeeder extends Seeder
         PersonalGradeType::create(['name' => 'kerajinan']);
         PersonalGradeType::create(['name' => 'ketaatan']);
 
+        // qualification seeder
+        $personalGrading = [
+            ['personal_grade_type_id' => 1, 'grade' => 100],
+            ['personal_grade_type_id' => 2, 'grade' => 90],
+        ];
+
+        $qualification = Qualification::create([
+            'group_member_id' => 1,
+            'grader_id' => 4,
+            'notes' => 'Orangnya rajin'
+        ]);
+
+        $qualification2 = Qualification::create([
+            'group_member_id' => 1,
+            'grader_id' => 5,
+            'notes' => 'Aku benci dia!'
+        ]);
+
+        $personalGrading = [
+            ['personal_grade_type_id' => 1, 'grade' => 100],
+            ['personal_grade_type_id' => 2, 'grade' => 90],
+        ];
+
+        foreach ($personalGrading as $grade) {
+            $qualification->grades()->create($grade);
+            $qualification2->grades()->create($grade);
+        }
+
         // to test presence rule
         $uastype = WeekType::find(4);
         $uastype->presenceRule()->create(['minimum' => 5]);
@@ -251,7 +280,7 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
-        //making one of the mahasiswa have presence:
+        //making one of the mahasiswa have api:
         $weekTypes = WeekType::all();
         $mahasiswa = User::find(3);
         foreach ($weekTypes as $weekType) {

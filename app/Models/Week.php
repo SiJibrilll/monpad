@@ -2,11 +2,20 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\Finalizable;
 use App\Services\GradeCalculator;
 use Illuminate\Database\Eloquent\Model;
 
 class Week extends Model
 {
+    use Finalizable;
+
+    public function getFinalizationSource()
+    {
+        // By default, assume the model itself has finalizations
+        return $this->project;
+    }
+
     protected $fillable = [
         'id',
         'project_id',

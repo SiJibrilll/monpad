@@ -2,7 +2,9 @@
 
 namespace Tests\Feature;
 
+use App\Models\GradeFinalization;
 use App\Models\Group;
+use App\Models\Mahasiswa;
 use App\Models\Project;
 use Tests\TestCase;
 use App\Models\User;
@@ -42,8 +44,6 @@ class GroupMemberControllerTest extends TestCase
             ]);
     }
 
-    
-
     /** @test */
     public function test_it_can_assign_members_to_group()
     {
@@ -70,6 +70,8 @@ class GroupMemberControllerTest extends TestCase
 
         $this->assertDatabaseHas('group_members', ['user_id' => $user1->id, 'group_id' => $group->id]);
         $this->assertDatabaseHas('group_members', ['user_id' => $user2->id, 'group_id' => $group->id]);
+        $this->assertDatabaseHas('grade_finalizations', ['user_id' => $user2->id, 'project_id' => $group->project->id]);
+
 
     }
 
@@ -85,5 +87,67 @@ class GroupMemberControllerTest extends TestCase
         $response->assertStatus(200);
 
         $this->assertDatabaseMissing('group_members', ['user_id' => $member->id]);
+        $this->assertDatabaseMissing('grade_finalizations', ['user_id' => $member->id, 'project_id' => $group->project->id]);
+    }
+
+    /** @test */
+    public function test_it_cannot_assign_members_to_finalized_group()
+    {
+        $group = Group::first();
+        $project = $group->project;
+
+        $finalization = GradeFinalization::where('project_id', $project->id)->first();
+        $this->postJson("/api/finalization/{$finalization->id}");
+
+        // create a new mahasiswa that will be inserted into a finalized group
+        $user1 = Mahasiswa::createMahasiswa([
+            'nim' => 'afffdsdfadf',
+            'name' => 'fadfeafeae',
+            'email' => 'ameil@mail.com',
+            'jabatan' => 'BE',
+            'angkatan' => 25,
+            'password' => 'afaefaefa',
+            'prodi' => 'TRPL'
+
+        ]);
+
+        $payload = [
+            'user_id' => [$user1->id]
+        ];
+
+        $response = $this->postJson("/api/group/{$group->id}/members", $payload);
+
+        $response->assertStatus(422)
+            ->assertJsonFragment([
+                'message' => 'Grade is already final'
+            ]);
+
+        $this->assertDatabaseMissing('group_members', ['user_id' => $user1->id, 'group_id' => $group->id]);
+        $this->assertDatabaseMissing('grade_finalizations', ['user_id' => $user1->id, 'project_id' => $group->project->id]);
+
+
+    }
+
+
+    /** @test */
+    public function test_it_cannot_detach_a_finalized_group_member()
+    {
+        $group = Group::firstOrFail();
+        $member = $group->members()->first();
+
+        $project = $group->project;
+
+        $finalization = GradeFinalization::where('project_id', $project->id)->first();
+        $this->postJson("/api/finalization/{$finalization->id}");
+
+        $response = $this->deleteJson("/api/group/{$group->id}/members/{$member->id}");
+
+        $response->assertStatus(422)
+            ->assertJsonFragment([
+                'message' => 'Grade is already final'
+            ]);
+
+        $this->assertDatabaseHas('group_members', ['user_id' => $member->id]);
+        $this->assertDatabaseHas('grade_finalizations', ['user_id' => $member->id, 'project_id' => $group->project->id]);
     }
 }
