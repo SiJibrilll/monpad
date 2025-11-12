@@ -6,6 +6,7 @@ use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\DosenController;
 use App\Http\Controllers\AsistenController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FinalizationController;
 use App\Http\Controllers\GradeNoteController;
 use App\Http\Controllers\GradeTypeController;
@@ -69,3 +70,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
          Route::post('/group/{group}/members/{member}/qualification', [QualificationController::class, 'store'])->middleware('not_finalized');
     });
 });
+
+// Route::get('/dashboard', [DashboardController::class, 'asisten']);
+Route::get('/dashboard', [DashboardController::class, 'dosen']);
