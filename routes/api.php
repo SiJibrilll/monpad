@@ -73,8 +73,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/dashboard/mahasiswa', [DashboardController::class, 'mahasiswa']);
     });
     
-});
 
-// Route::get('/dashboard', [DashboardController::class, 'asisten']);
-// Route::get('/dashboard', [DashboardController::class, 'mahasiswa']);
-// Route::get('/dashboard', [DashboardController::class, 'dosen']);
+    // global routes
+    Route::get('/profile', [AuthController::class, 'profile']);
+});
