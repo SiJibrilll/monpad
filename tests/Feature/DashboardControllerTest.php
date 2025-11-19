@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Project;
 use Tests\TestCase;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -26,6 +27,40 @@ class DashboardControllerTest extends TestCase
         $user = User::mahasiswa()->first();
         Sanctum::actingAs($user, ['*']);
 
+        // get dashboard
+        $response = $this->getJson('/api/dashboard/mahasiswa');
+
+
+        $response->assertStatus(200)->assertJsonStructure([
+            'data' => [
+                'groups' => [
+                    '*' => [
+                        'nama',
+                        'anggota' => [
+                            '*' => [
+                                'nim'
+                            ]
+                            ],
+                        'project' => [
+                            'nama_projek'
+                        ],
+                    ]
+                ],
+                'grades'
+            ]
+        ]);
+    }
+
+    /** @test */
+    public function test_it_can_show_mahasiswa_dashboard_with_finalized_grade()
+    {
+        $mahasiswa = User::mahasiswa()->first();
+        $dosen = User::dosen()->first();
+
+        Sanctum::actingAs($dosen, ['*']);
+        $this->postJson("/api/finalization/{$mahasiswa->finalizations()->first()->id}");
+
+        Sanctum::actingAs($mahasiswa, ['*']);
         // get dashboard
         $response = $this->getJson('/api/dashboard/mahasiswa');
 
