@@ -14,4 +14,8 @@ class WeekType extends Model
     function gradeType() {
         return $this->belongsToMany(GradeType::class, 'week_type_grade_type');
     }
+
+    function presenceRule() {
+        return $this->hasOne(PresenceRule::class);
+    }
 }

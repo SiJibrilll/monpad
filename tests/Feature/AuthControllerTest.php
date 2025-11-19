@@ -26,7 +26,6 @@ class AuthControllerTest extends TestCase
     public function test_it_can_login()
     {
         $payload = [
-            'username' => 'dosen1',
             'email' => 'dosen1@example.com',
             'password' => 'password'
         ];
@@ -40,6 +39,7 @@ class AuthControllerTest extends TestCase
                     'id',
                     'username'
                 ],
+                'role',
                 'token'
             ]
         ]);

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class PersonalGrade extends Model
 {
@@ -10,4 +11,8 @@ class PersonalGrade extends Model
         'personal_grade_type_id',
         'grade'
     ];
+
+    function gradeType() {
+        return $this->BelongsTo(PersonalGradeType::class);
+    }
 }

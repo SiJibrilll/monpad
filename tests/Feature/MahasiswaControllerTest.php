@@ -2,6 +2,9 @@
 
 namespace Tests\Feature;
 
+use App\Models\Dosen;
+use App\Models\GradeFinalization;
+use App\Models\Project;
 use Tests\TestCase;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -125,5 +128,26 @@ class MahasiswaControllerTest extends TestCase
 
         $this->assertDatabaseMissing('users', ['id' => $user->id]);
         $this->assertDatabaseMissing('mahasiswa_datas', ['user_id' => $user->id]);
+    }
+
+    /** @test */
+    public function test_it_cannot_delete_a_finalized_mahasiswa()
+    {
+        $project = Project::first();
+        $finalization = GradeFinalization::where('project_id', $project->id)->first();
+        $this->postJson("/api/finalization/{$finalization->id}");
+
+
+        $user = User::mahasiswa()->firstOrFail();
+
+        $response = $this->deleteJson("/api/mahasiswa/{$user->id}");
+
+        $response->assertStatus(403)
+        ->assertJsonFragment([
+            'message' => 'This record is finalized.'
+        ]);
+
+        $this->assertDatabaseHas('users', ['id' => $user->id]);
+        $this->assertDatabaseHas('mahasiswa_datas', ['user_id' => $user->id]);
     }
 }

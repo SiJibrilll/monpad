@@ -11,11 +11,12 @@ use Spatie\Permission\Traits\HasRoles;
 use App\Models\Mahasiswa;
 use App\Models\Dosen;
 use App\Models\Asisten;
+use App\Models\Concerns\Finalizable;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasApiTokens,HasFactory, Notifiable, HasRoles;
+    use HasApiTokens,HasFactory, Notifiable, HasRoles, Finalizable;
 
     /**
      * The attributes that are mass assignable.
@@ -80,6 +81,18 @@ class User extends Authenticatable
     }
 
     function groups() {
-        return $this->belongsToMany(Group::class, 'group_members', 'user_id', 'group_id');
+        return $this->belongsToMany(Group::class, 'group_members', 'user_id', 'group_id')->withPivot('id');
+    }
+
+    function memberShip() {
+        return $this->hasMany(GroupMember::class);
+    }
+
+    function presences() {
+        return $this->hasMany(Presence::class);
+    }
+
+    function finalizations() {
+        return $this->hasMany(GradeFinalization::class);
     }
 }

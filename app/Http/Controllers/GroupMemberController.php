@@ -25,6 +25,14 @@ class GroupMemberController extends Controller
         $group->members()->sync($validated['user_id']);
         $group->refresh();
 
+        //create finalization record
+        foreach ($validated['user_id'] as $userId) {
+            $group->project->finalizations()->create([
+                'user_id' => $userId,
+            ]);
+        }
+
+
         $members = $group->members()->with('mahasiswa_data')->get();
 
         return MahasiswaResource::collection($members);
@@ -39,6 +47,7 @@ class GroupMemberController extends Controller
         }
 
         $group->members()->detach($member->id);
+        $group->project->finalizations()->find($member->id)->first()->delete();
 
         return response()->json([
             'message' => 'Member removed successfully.'

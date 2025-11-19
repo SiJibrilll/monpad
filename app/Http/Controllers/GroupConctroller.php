@@ -80,9 +80,8 @@ class GroupConctroller extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Group $group)
     {
-        $group = Group::find($id);
         if (!$group) {
             return response()->json(['message' => 'Group Not found'], 404);
         }

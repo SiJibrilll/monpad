@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\GradeFinalization;
 use App\Models\Group;
 use App\Models\Project;
 use Tests\TestCase;
@@ -129,5 +130,22 @@ class GroupControllerTest extends TestCase
         $response->assertStatus(204);
 
         $this->assertDatabaseMissing('groups', ['id' => $group->id]);
+    }
+
+    /** @test */
+    public function test_it_cannot_delete_a_finalized_group()
+    {
+        $group = Group::firstOrFail();
+        $project = $group->project;
+
+        $finalization = GradeFinalization::where('project_id', $project->id)->first();
+        $this->postJson("/api/finalization/{$finalization->id}");
+
+
+        $response = $this->deleteJson("/api/group/{$group->id}");
+
+        $response->assertStatus(403);
+
+        $this->assertDatabaseHas('groups', ['id' => $group->id]);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\GradeFinalization;
 use App\Models\Project;
 use Tests\TestCase;
 use App\Models\User;
@@ -164,5 +165,75 @@ class WeekControllerTest extends TestCase
 
         $this->assertDatabaseMissing('weeks', ['id' => $week->id]);
         $this->assertDatabaseMissing('grades', ['id' => $grade->id]);
+    }
+
+    /** @test */
+    public function test_it_cannot_store_a_new_week_in_a_final_grade()
+    {
+        $grader = User::asisten()->first();
+        $project = Project::first();
+        $weekType = WeekType::first();
+
+        $finalization = GradeFinalization::where('project_id', $project->id)->first();
+        $this->postJson("/api/finalization/{$finalization->id}");
+
+        $payload = [
+            'notes' => 'Kurang rapih',
+            'grader_id' => $grader->id,
+            'date' => now(),
+            'week_type_id' => $weekType->id,
+            'grades' => [
+                ['grade_type_id' => 1, 'grade' => 100],
+                ['grade_type_id' => 2, 'grade' => 50]
+            ],
+            'project_id' => $project->id,
+            
+        ];
+
+        $response = $this->postJson('/api/week', $payload);
+    
+        
+        $response->assertStatus(403)
+            ->assertJsonFragment([
+                'message' => 'This record is finalized.'
+            ]);
+
+        $this->assertDatabaseMissing('weeks', ['notes' => $payload['notes']]);
+    }
+
+    /** @test */
+    public function test_it_cannot_update_a_final_week_and_grade()
+    {
+        $week = Week::first();
+
+        $grader = User::asisten()->first();
+        $project = Project::first();
+        $weekType = WeekType::first();
+
+        $finalization = GradeFinalization::where('project_id', $project->id)->first();
+        $this->postJson("/api/finalization/{$finalization->id}");
+
+        $payload = [
+            'notes' => 'Udah keren',
+            'grader_id' => $grader->id,
+            'date' => now(),
+            'week_type_id' => $weekType->id,
+            'grades' => [
+                ['grade_type_id' => 1, 'grade' => 10],
+                ['grade_type_id' => 2, 'grade' => 100]
+            ],
+            'project_id' => $project->id,
+            
+        ];
+
+        $response = $this->putJson("/api/week/{$week->id}", $payload);
+
+        $response->assertStatus(403)
+            ->assertJsonFragment([
+                'message' => 'This record is finalized.'
+            ]);
+
+        $this->assertDatabaseMissing('weeks', ['notes' => $payload['notes']]);
+        $this->assertDatabaseMissing('grades', ['grade_type_id' => $payload['grades'][0]['grade_type_id'], 'grade' => $payload['grades'][0]['grade']]);
     }
 }

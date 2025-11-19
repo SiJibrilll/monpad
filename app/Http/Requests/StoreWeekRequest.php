@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Models\WeekType;
 use App\Rules\isAsisten;
+use App\Rules\notFinalized;
 use Illuminate\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 

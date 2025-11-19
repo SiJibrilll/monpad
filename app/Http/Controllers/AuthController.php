@@ -11,13 +11,9 @@ class AuthController extends Controller
 {
     function login(Request $request) {
         $validated = $request->validate([
-            'username' => ['required', 'string'],
             'email' => ['required', 'email'],
             'password' => ['required', 'string']
         ]);
-
-        $validated['name'] = $validated['username'];
-        unset($validated['username']);
 
         if (!Auth::attempt($validated)) {
             return response()->json([

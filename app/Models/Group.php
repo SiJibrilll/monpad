@@ -2,14 +2,22 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\Finalizable;
 use Illuminate\Database\Eloquent\Model;
 
 class Group extends Model
 {
+    use Finalizable;
+
     protected $fillable = [
         'name',
         'project_id'
     ];
+
+     public function getFinalizationSource()
+    {
+        return $this->project;
+    }
 
     function project() {
         return $this->belongsTo(Project::class);

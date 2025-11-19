@@ -22,6 +22,14 @@ class ProjectResource extends JsonResource
             'tahun_ajaran' => $this->tahun_ajaran,
             'owner' => new DosenResource($this->whenLoaded('owner')),
             'asisten' => new AsistenResource($this->whenLoaded('asisten')),
+            'finalized' => $this->isFinalized(),
+            'updated_at' => $this->updated_at->format('d M Y'),
+            'week_period' => $this->whenLoaded('weeks', function () {
+                return $this->currentPeriod();
+            }),
+            'grade' => $this->whenLoaded('weeks', function () {
+                return $this->projectGrade();
+            })
         ];
     }
 }
