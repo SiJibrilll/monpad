@@ -74,17 +74,14 @@ class GradeCalculator
         return round($weightedSum / $totalWeight, 2);
     }
 
-    // public function getWeeklyGrades(Collection $weeks)
-    // {
-    //     // Make sure relationships are preloaded to reduce N+1 queries
-    //     $weeks->loadMissing(['grades.gradeType', 'weekType']);
+    function globalAverage(Collection $projects) {
+        $count = $projects->count();
+        $totalGrade = 0;
 
-    //     return $weeks->map(function ($week) {
-    //         return [
-    //             'week' => $week,
-    //             'grade' => $week->totalGrade(),
-    //         ];
-    //     })->filter(fn ($item) => !is_null($item['grade']))->values();
-    // }
+        foreach ($projects as $project) {
+            $totalGrade += $project->projectGrade();
+        }
+        return $totalGrade / $count;
+    }
 
 }

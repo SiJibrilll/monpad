@@ -48,9 +48,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
         //grade finalizations
         Route::get('/finalization', [FinalizationController::class, 'index']);
-        Route::post('/finalization/{finalization}', [FinalizationController::class, 'finalize']);
-
+        Route::post('/finalization/{finalization}', [FinalizationController::class, 'finalize']);    
         
+        Route::get('/dashboard/dosen', [DashboardController::class, 'dosen']);
     });
 
     // -- asisten/dosen features
@@ -63,13 +63,18 @@ Route::middleware(['auth:sanctum'])->group(function () {
         // presence feature
         Route::get('group/{group}/weekly-presence/{weekType}', [PresenceController::class, 'index']);
         Route::put('group/{group}/weekly-presence/{weekType}', [PresenceController::class, 'update']);
+
+        Route::get('/dashboard/asisten', [DashboardController::class, 'asisten']);
     });
 
     Route::middleware(['role:mahasiswa'])->group(function () {
+        Route::post('/group/{group}/members/{member}/qualification', [QualificationController::class, 'store'])->middleware('not_finalized');
 
-         Route::post('/group/{group}/members/{member}/qualification', [QualificationController::class, 'store'])->middleware('not_finalized');
+        Route::get('/dashboard/mahasiswa', [DashboardController::class, 'mahasiswa']);
     });
+    
 });
 
 // Route::get('/dashboard', [DashboardController::class, 'asisten']);
-Route::get('/dashboard', [DashboardController::class, 'dosen']);
+// Route::get('/dashboard', [DashboardController::class, 'mahasiswa']);
+// Route::get('/dashboard', [DashboardController::class, 'dosen']);

@@ -159,6 +159,7 @@ class DatabaseSeeder extends Seeder
             ['name' => 'week 2','percentage' => 30],
             ['name' => 'UTS','percentage' => 50],
             ['name' => 'UAS','percentage' => 90],
+            ['name' => 'week 3', 'percentage' => 20]
         ];
 
         foreach ($weekTypes as $type) {

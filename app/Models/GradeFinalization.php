@@ -61,7 +61,6 @@ class GradeFinalization extends Model
     function finalGrade() {
         return ($this->projectGrade() * 0.5) + ($this->personalGrade($this->user_id) * 0.3) + ($this->memberGrade()->avg() * 0.2);
     }
-
     
     function mapGradesWithTypeNames(Collection $member_grade): Collection
     {

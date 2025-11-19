@@ -36,6 +36,20 @@ class Project extends Model
         return $this->hasMany(Week::class);
     }
 
+    function currentPeriod() {
+        $weekTypeCount = WeekType::count();
+        $weeks = $this->weeks()->count();
+
+        return "$weeks / $weekTypeCount";
+    }
+
+    function projectGrade() {
+        $weeks = $this->weeks;
+        $gradeCalculator = new GradeCalculator;
+        return $gradeCalculator->calculateProjectGrade($weeks);
+    }
+
+
     function finalizations() {
         return $this->hasMany(GradeFinalization::class);
     }

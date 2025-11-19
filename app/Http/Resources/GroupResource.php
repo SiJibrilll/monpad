@@ -18,6 +18,7 @@ class GroupResource extends JsonResource
             'id' => $this->id,
             'nama' => $this->name,
             'anggota' => MahasiswaResource::collection($this->whenLoaded('members')),
+            'project' => new ProjectResource($this->whenLoaded('project')),
             'project_id' => $this->project_id
         ];
     }
