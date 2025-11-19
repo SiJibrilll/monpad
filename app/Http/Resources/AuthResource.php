@@ -18,6 +18,7 @@ class AuthResource extends JsonResource
     {
         return [
             'user' =>  UserResourceService::make($this->resource['user']),
+            'role' => $this->resource['user']->getRoleNames()->first(),
             'token' => $this->resource['token']
         ];
     }
