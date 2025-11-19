@@ -17,11 +17,6 @@ class DashboardControllerTest extends TestCase
 
         // Seed the database with dummy data
         $this->seed();
-
-        // $user = User::find(1);
-         
-        // // Fake-authenticate this user as Sanctum user with abilities
-        // Sanctum::actingAs($user, ['*']); // or ->actingAs($user, ['create', 'update'])
     }
 
     /** @test */
@@ -33,21 +28,26 @@ class DashboardControllerTest extends TestCase
 
         // get dashboard
         $response = $this->getJson('/api/dashboard/mahasiswa');
-        // $response->dump();
 
 
-        // $response->assertStatus(200)
-        //     ->assertJsonStructure([
-        //         'data' => [
-        //             '*' => [
-        //                 'id',
-        //                 'username',
-        //                 'email',
-        //                 'nidn',
-        //                 'fakultas',
-        //             ]
-        //         ]
-        //     ]);
+        $response->assertStatus(200)->assertJsonStructure([
+            'data' => [
+                'groups' => [
+                    '*' => [
+                        'nama',
+                        'anggota' => [
+                            '*' => [
+                                'nim'
+                            ]
+                            ],
+                        'project' => [
+                            'nama_projek'
+                        ],
+                    ]
+                ],
+                'grades'
+            ]
+        ]);
     }
     
     /** @test */
@@ -59,21 +59,14 @@ class DashboardControllerTest extends TestCase
 
         // get dashboard
         $response = $this->getJson('/api/dashboard/asisten');
-        // $response->dump();
 
-
-        // $response->assertStatus(200)
-        //     ->assertJsonStructure([
-        //         'data' => [
-        //             '*' => [
-        //                 'id',
-        //                 'username',
-        //                 'email',
-        //                 'nidn',
-        //                 'fakultas',
-        //             ]
-        //         ]
-        //     ]);
+        $response->assertStatus(200)
+            ->assertJsonStructure([
+                'data' => [
+                    'jumlah_mahasiswa',
+                    'rata_rata'
+                ]
+            ]);
     }
 
     /** @test */
@@ -85,20 +78,16 @@ class DashboardControllerTest extends TestCase
 
         // get dashboard
         $response = $this->getJson('/api/dashboard/dosen');
-        $response->dump();
 
 
-        // $response->assertStatus(200)
-        //     ->assertJsonStructure([
-        //         'data' => [
-        //             '*' => [
-        //                 'id',
-        //                 'username',
-        //                 'email',
-        //                 'nidn',
-        //                 'fakultas',
-        //             ]
-        //         ]
-        //     ]);
+        $response->assertStatus(200)
+            ->assertJsonStructure([
+                'data' => [
+                    'jumlah_mahasiswa',
+                    'jumlah_asisten',
+                    'jumlah_projek',
+                    'rata_rata'
+                ]
+            ]);
     }
 }

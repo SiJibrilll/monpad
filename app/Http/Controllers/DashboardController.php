@@ -27,8 +27,10 @@ class DashboardController extends Controller
         $projects = Project::all();
 
         return response()->json([
-            'jumlah_mahasiswa' => $mahasiswaCount,
-            'rata_rata' => $gradeCalculator->globalAverage($projects)
+            'data' => [
+                'jumlah_mahasiswa' => $mahasiswaCount,
+                'rata_rata' => $gradeCalculator->globalAverage($projects)
+            ]
         ], 200);
     }
 
@@ -40,18 +42,25 @@ class DashboardController extends Controller
         $rataRata = $gradeCalculator->globalAverage($projects);
 
         return response()->json([
-            'jumlah_mahasiswa' => $mahasiswaCount,
-            'jumlah_asisten' => $asistenCount,
-            'jumlah_projek' => $projects->count(),
-            'rata_rata' => $rataRata
+            'data' => [
+                'jumlah_mahasiswa' => $mahasiswaCount,
+                'jumlah_asisten' => $asistenCount,
+                'jumlah_projek' => $projects->count(),
+                'rata_rata' => $rataRata
+            ]
         ]);
     }
 
     function mahasiswa() {
-        $groups = Auth::user()->groups()->with(['project.weeks.weekType', 'project.weeks.grades.gradeType', 'project.finalizations','members', 'project.weeks'])->get();
+        $user = Auth::user();
+        $groups = $user->groups()->with(['project.weeks.weekType', 'project.weeks.grades.gradeType', 'project.finalizations','members', 'project.weeks'])->get();
+        $grades = $user->isFinalized() ? $user->finalizations : null;
 
         return response()->json([
-            'groups' => GroupResource::collection($groups)
+            'data' => [
+                'grades' => $grades, 
+                'groups' => GroupResource::collection($groups)                
+            ]
         ], 200);
 
     }
