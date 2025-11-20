@@ -54,7 +54,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/dashboard/dosen', [DashboardController::class, 'dosen']);
 
         //excell routes
-        Route::get('/excel/mahasiswa/template', [ExcellController::class, 'mahasiswaTemplate']);
+        Route::post('/excel/mahasiswa/import', [ExcellController::class, 'mahasiswaImport']);
     });
 
     // -- asisten/dosen features
