@@ -38,4 +38,9 @@ class FinalizationControllerTest extends TestCase
         
         $this->assertDatabaseHas('grade_finalizations', ['id' => $finalization->id, 'confirmed' => true]);
     }
+
+    public function test_it_can_show_final() {
+        $response = $this->getJson("/api/finalization");
+         $response->assertStatus(200);
+    }
 }

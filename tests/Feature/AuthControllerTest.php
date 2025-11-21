@@ -45,6 +45,24 @@ class AuthControllerTest extends TestCase
         ]);
     }
 
+    function test_it_can_return_profile_data() {
+        $user = User::find(1);         
+        Sanctum::actingAs($user, ['*']);
+
+        $response = $this->getJson('/api/profile');
+
+        $response->assertStatus(200)->assertJsonStructure([
+            'data' => [
+                'user' => [
+                    'id',
+                    'username'
+                ],
+                'role'
+            ]
+        ]);
+    }
+
+
     /** @test */
     public function test_it_can_logout()
     {

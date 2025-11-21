@@ -7,6 +7,7 @@ use App\Http\Controllers\DosenController;
 use App\Http\Controllers\AsistenController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ExcellController;
 use App\Http\Controllers\FinalizationController;
 use App\Http\Controllers\GradeNoteController;
 use App\Http\Controllers\GradeTypeController;
@@ -51,6 +52,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('/finalization/{finalization}', [FinalizationController::class, 'finalize']);    
         
         Route::get('/dashboard/dosen', [DashboardController::class, 'dosen']);
+
+        //excell routes
+        Route::post('/excel/mahasiswa/import', [ExcellController::class, 'mahasiswaImport']);
     });
 
     // -- asisten/dosen features
@@ -87,8 +91,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/dashboard/mahasiswa', [DashboardController::class, 'mahasiswa']);
     });
     
-});
 
-// Route::get('/dashboard', [DashboardController::class, 'asisten']);
-// Route::get('/dashboard', [DashboardController::class, 'mahasiswa']);
-// Route::get('/dashboard', [DashboardController::class, 'dosen']);
+    // global routes
+    Route::get('/profile', [AuthController::class, 'profile']);
+});

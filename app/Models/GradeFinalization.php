@@ -30,19 +30,38 @@ class GradeFinalization extends Model
     }
 
     function personalGrade($userId) {
-        $specialWeeksCount = WeekType::has('presenceRule')->count();
         $personalWeeks = $this->project->weeks()->has('weekType.presenceRule')->with('weekType.presenceRule')->get();
         $presenceCount = User::with('presences')->find($userId)->presences()->count();
-        
-        $gradeSum = 0;
+        $gradeCalculator = new GradeCalculator;
+    
+        $weightedSum = 0;
+        $totalWeight = 0;
+
         foreach ($personalWeeks as $personal) {
             if ($presenceCount < $personal->weekType->presenceRule->minimum) {
                 continue;
             }
 
-            $gradeSum += $personal->totalGrade();
+            // Use your existing week calculator
+            $weekTotal = $gradeCalculator->calculateWeekTotal($personal);
+
+            // Skip if this week has no grades
+            if (is_null($weekTotal)) {
+                continue;
+            }
+
+            // Get the weight of this week's type (e.g. Midterm 30%, Final 40%, etc.)
+            $weekWeight = $personal->weekType->percentage ?? 0;
+
+            $weightedSum += $weekTotal * $weekWeight;
+            $totalWeight += $weekWeight;
         }
-        return $gradeSum / $specialWeeksCount;
+        
+        if ($totalWeight == 0) {
+            return null;
+        }
+
+        return round($weightedSum / $totalWeight, 2);
     }
 
     function memberGrade() {
