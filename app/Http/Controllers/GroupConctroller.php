@@ -25,6 +25,8 @@ class GroupConctroller extends Controller
      */
     public function store(Request $request)
     {
+        $this->authorize('create', Group::class);
+
         $validated = $request->validate([
             'name' => ['required', 'string'],
             'project_id' => ['required', 'exists:projects,id']
@@ -58,6 +60,7 @@ class GroupConctroller extends Controller
     {
         $group = Group::find($id);
 
+        $this->authorize('update', $group);
         if (!$group) {
             return response()->json(['message' => 'Group not found'], 404);
         }
@@ -73,8 +76,6 @@ class GroupConctroller extends Controller
         $group->load(['members']);
 
         return new GroupResource($group);
-
-
     }
 
     /**
@@ -82,6 +83,8 @@ class GroupConctroller extends Controller
      */
     public function destroy(Group $group)
     {
+        $this->authorize('delete', $group);
+
         if (!$group) {
             return response()->json(['message' => 'Group Not found'], 404);
         }
