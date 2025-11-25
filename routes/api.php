@@ -11,7 +11,7 @@ use App\Http\Controllers\ExcellController;
 use App\Http\Controllers\FinalizationController;
 use App\Http\Controllers\GradeNoteController;
 use App\Http\Controllers\GradeTypeController;
-use App\Http\Controllers\GroupConctroller;
+use App\Http\Controllers\GroupController;
 use App\Http\Controllers\GroupMemberController;
 use App\Http\Controllers\PresenceController;
 use App\Http\Controllers\ProjectController;
@@ -25,32 +25,30 @@ Route::post('login', [AuthController::class, 'login']);
 Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
 Route::middleware(['auth:sanctum'])->group(function () {
-    
+
     // -- dosen features
     Route::middleware(['role:dosen'])->group(function () {
 
         Route::apiResource('mahasiswa', MahasiswaController::class)->middleware('not_finalized');
 
         Route::apiResource('dosen', DosenController::class);
-        
+
         Route::apiResource('asisten', AsistenController::class);
-        
+
         Route::apiResource('project', ProjectController::class)->middleware('not_finalized');
-        
-        Route::apiResource('group', GroupConctroller::class)->middleware('not_finalized');
-        
+
         Route::apiResource('group.members', GroupMemberController::class)->only(['index', 'store', 'destroy'])->middleware('not_finalized');
 
         Route::apiResource('week-type', WeekTypeController::class);
-        
+
         Route::apiResource('grade-type', GradeTypeController::class);
 
         Route::apiResource('week.review', GradeNoteController::class);
 
         //grade finalizations
         Route::get('/finalization', [FinalizationController::class, 'index']);
-        Route::post('/finalization/{finalization}', [FinalizationController::class, 'finalize']);    
-        
+        Route::post('/finalization/{finalization}', [FinalizationController::class, 'finalize']);
+
         Route::get('/dashboard/dosen', [DashboardController::class, 'dosen']);
 
         //excell routes
@@ -60,6 +58,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // -- asisten/dosen features
     Route::middleware(['role:asisten|dosen'])->group(function () {
         Route::apiResource('week', WeekController::class)->middleware('not_finalized');
+        Route::apiResource('group', GroupController::class)->middleware('not_finalized');
     });
 
     // -- asisten features
@@ -76,8 +75,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
         Route::get('/dashboard/mahasiswa', [DashboardController::class, 'mahasiswa']);
     });
-    
+
 
     // global routes
     Route::get('/profile', [AuthController::class, 'profile']);
 });
+
