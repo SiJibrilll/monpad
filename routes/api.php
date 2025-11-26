@@ -109,20 +109,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('group/{group}/weekly-presence/{weekType}', [PresenceController::class, 'index']);
         Route::put('group/{group}/weekly-presence/{weekType}', [PresenceController::class, 'update']);
 
-        Route::apiResource('mahasiswa', MahasiswaController::class)->only(['index', 'show']);
-
-        Route::apiResource('project', ProjectController::class)->only(['index', 'show']);
-        
-        Route::apiResource('group', GroupConctroller::class)->only(['index', 'show']);
-        
-        Route::apiResource('group.members', GroupMemberController::class)->only(['index', 'store', 'destroy'])->only(['index', 'show']);
-
-        Route::apiResource('week-type', WeekTypeController::class)->only(['index', 'show']);
-        
-        Route::apiResource('grade-type', GradeTypeController::class)->only(['index', 'show']);
-
-        Route::apiResource('week.review', GradeNoteController::class)->only(['index', 'show']);
-
         Route::get('/dashboard/asisten', [DashboardController::class, 'asisten']);
     });
 
