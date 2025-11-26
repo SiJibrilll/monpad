@@ -19,65 +19,113 @@ use App\Http\Controllers\QualificationController;
 use App\Http\Controllers\WeekController;
 use App\Http\Controllers\WeekTypeController;
 
-// auth routes
+// auth
 Route::post('login', [AuthController::class, 'login']);
-
 Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+
 
 Route::middleware(['auth:sanctum'])->group(function () {
 
-    // -- dosen features
+    // global
+    Route::get('/profile', [AuthController::class, 'profile']);
+
+
+    // =====================================================
+    // DOSEN-ONLY ROUTES
+    // =====================================================
     Route::middleware(['role:dosen'])->group(function () {
 
-        Route::apiResource('mahasiswa', MahasiswaController::class)->middleware('not_finalized');
+        Route::apiResource('mahasiswa', MahasiswaController::class)
+            ->middleware('not_finalized');
 
         Route::apiResource('dosen', DosenController::class);
-
         Route::apiResource('asisten', AsistenController::class);
 
-        Route::apiResource('project', ProjectController::class)->middleware('not_finalized');
+        Route::apiResource('project', ProjectController::class)
+            ->middleware('not_finalized');
 
-        Route::apiResource('group.members', GroupMemberController::class)->only(['index', 'store', 'destroy'])->middleware('not_finalized');
+        Route::apiResource('group', GroupController::class)
+            ->middleware('not_finalized');
+
+        Route::apiResource('group.members', GroupMemberController::class)
+            ->only(['index', 'store', 'destroy'])
+            ->middleware('not_finalized');
 
         Route::apiResource('week-type', WeekTypeController::class);
-
         Route::apiResource('grade-type', GradeTypeController::class);
-
         Route::apiResource('week.review', GradeNoteController::class);
 
-        //grade finalizations
         Route::get('/finalization', [FinalizationController::class, 'index']);
         Route::post('/finalization/{finalization}', [FinalizationController::class, 'finalize']);
 
         Route::get('/dashboard/dosen', [DashboardController::class, 'dosen']);
 
-        //excell routes
         Route::post('/excel/mahasiswa/import', [ExcellController::class, 'mahasiswaImport']);
     });
 
-    // -- asisten/dosen features
+
+    // =====================================================
+    // SHARED ASISTEN + DOSEN (NO CONFLICTS) WITH READONLY FILTERING
+    // =====================================================
     Route::middleware(['role:asisten|dosen'])->group(function () {
         Route::apiResource('week', WeekController::class)->middleware('not_finalized');
-        Route::apiResource('group', GroupController::class)->middleware('not_finalized');
+
+        // READ ONLY: mahasiswa
+        Route::get('mahasiswa',          [MahasiswaController::class, 'index']);
+        Route::get('mahasiswa/{id}',     [MahasiswaController::class, 'show']);
+
+        // READ ONLY: project
+        Route::get('project',            [ProjectController::class, 'index']);
+        Route::get('project/{id}',       [ProjectController::class, 'show']);
+
+        // READ ONLY: group
+        Route::get('group',              [GroupController::class, 'index']);
+        Route::get('group/{id}',         [GroupController::class, 'show']);
+
+        // READ ONLY: group.members
+        Route::get('group/{group}/members', [GroupMemberController::class, 'index']);
+        Route::get('group/{group}/members/{member}', [GroupMemberController::class, 'show']);
+
+        // READ ONLY: week-type
+        Route::get('week-type',          [WeekTypeController::class, 'index']);
+        Route::get('week-type/{id}',     [WeekTypeController::class, 'show']);
+
+        // READ ONLY: grade-type
+        Route::get('grade-type',         [GradeTypeController::class, 'index']);
+        Route::get('grade-type/{id}',    [GradeTypeController::class, 'show']);
+
+        // READ ONLY: week.review
+        Route::get('week/{week}/review',                 [GradeNoteController::class, 'index']);
+        Route::get('week/{week}/review/{review}',        [GradeNoteController::class, 'show']);
     });
 
-    // -- asisten features
+
+    // =====================================================
+    // ASISTEN ROUTES 
+    // =====================================================
     Route::middleware(['role:asisten', 'not_finalized'])->group(function () {
-        // presence feature
+
+        // presence
         Route::get('group/{group}/weekly-presence/{weekType}', [PresenceController::class, 'index']);
         Route::put('group/{group}/weekly-presence/{weekType}', [PresenceController::class, 'update']);
 
         Route::get('/dashboard/asisten', [DashboardController::class, 'asisten']);
     });
 
+
+
+
+    // =====================================================
+    // MAHASISWA ROUTES
+    // =====================================================
     Route::middleware(['role:mahasiswa'])->group(function () {
-        Route::post('/group/{group}/members/{member}/qualification', [QualificationController::class, 'store'])->middleware('not_finalized');
+
+        Route::post('/group/{group}/members/{member}/qualification',
+            [QualificationController::class, 'store']
+        )->middleware('not_finalized');
 
         Route::get('/dashboard/mahasiswa', [DashboardController::class, 'mahasiswa']);
     });
 
-
-    // global routes
-    Route::get('/profile', [AuthController::class, 'profile']);
 });
 
