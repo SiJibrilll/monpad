@@ -9,10 +9,9 @@ use Illuminate\Http\Request;
 
 use function Pest\Laravel\json;
 
-class GroupConctroller extends Controller
+class GroupController extends Controller
 {
     use AuthorizesRequests;
-
     /**
      * Display a listing of the resource.
      */
