@@ -15,6 +15,7 @@ class GradeFinalizationResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'id' => $this->id,
             'user' => new MahasiswaResource($this->whenLoaded('user')),
             'group' => new GroupResource($this->whenLoaded('users.memberShip.group')),
             'member_grade' => $this->memberGrade(),
