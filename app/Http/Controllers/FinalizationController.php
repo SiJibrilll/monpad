@@ -8,6 +8,7 @@ use App\Models\PersonalGradeType;
 use App\Models\Project;
 use App\Models\User;
 use App\Models\Week;
+use App\Models\WeekType;
 use App\Services\PresenceRuleValidator;
 use Illuminate\Http\Request;
 
@@ -23,7 +24,16 @@ class FinalizationController extends Controller
         return GradeFinalizationResource::collection($finalizations);
     }
 
-    function finalize(GradeFinalization $finalization) {
+    function finalize(GradeFinalization $finalization)
+    {
+        $finalization->load('project.weeks');
+        $weekCount = WeekType::count();
+
+        if ($finalization->project->weeks()->count() != $weekCount) {
+            return response()->json([
+                'message' => "Project grades are incomplete"
+            ], 403);
+        }
         $finalization->confirmed = true;
         $finalization->update();
 

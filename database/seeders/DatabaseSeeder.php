@@ -90,7 +90,6 @@ class DatabaseSeeder extends Seeder
                         'fakultas' => 'Basis Data',
                     ]
                 );
-
             } elseif (str_contains($user->name, 'asisten')) {
                 $user->assignRole('asisten');
 
@@ -101,7 +100,6 @@ class DatabaseSeeder extends Seeder
                         'nim' => '12/1238/12312311'
                     ]
                 );
-
             } else {
                 $user->assignRole('mahasiswa');
 
@@ -151,9 +149,9 @@ class DatabaseSeeder extends Seeder
 
         // === Week Types ===
         $gradeTypes = [
-            ['name' => 'kerapihan','percentage' => 10],
-            ['name' => 'estetika','percentage' => 30],
-            ['name' => 'kecepatan','percentage' => 50],
+            ['name' => 'kerapihan', 'percentage' => 10],
+            ['name' => 'estetika', 'percentage' => 30],
+            ['name' => 'kecepatan', 'percentage' => 50],
         ];
 
         foreach ($gradeTypes as $type) {
@@ -162,11 +160,11 @@ class DatabaseSeeder extends Seeder
 
         // === Week Types ===
         $weekTypes = [
-            ['name' => 'week 1','percentage' => 10],
-            ['name' => 'week 2','percentage' => 30],
-            ['name' => 'UTS','percentage' => 50],
-            ['name' => 'UAS','percentage' => 90],
-            ['name' => 'week 3', 'percentage' => 20]
+            ['name' => 'week 1', 'percentage' => 10],
+            ['name' => 'week 2', 'percentage' => 30],
+            ['name' => 'week 3', 'percentage' => 20],
+            ['name' => 'UTS', 'percentage' => 50],
+            /* ['name' => 'UAS', 'percentage' => 90], */
         ];
 
         foreach ($weekTypes as $type) {
@@ -195,7 +193,7 @@ class DatabaseSeeder extends Seeder
             'notes' => "mulai keren"
         ]);
 
-        
+
 
         foreach ($gradeTypes as $gradeType) {
             $week->grades()->create([
@@ -215,7 +213,7 @@ class DatabaseSeeder extends Seeder
 
         $week->review()->create([
             'note' => 'Nilainya harusnya bagus menurut saya',
-            'writer_id' => $dosen->id, 
+            'writer_id' => $dosen->id,
         ]);
 
         // personal grade type seeder
