@@ -61,6 +61,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/dashboard/dosen', [DashboardController::class, 'dosen']);
 
         Route::post('/excel/mahasiswa/import', [ExcellController::class, 'mahasiswaImport']);
+        Route::get('/excel/mahasiswa/template', [ExcellController::class, 'mahasiswaTemplate']);
     });
 
 
@@ -101,7 +102,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 
     // =====================================================
-    // ASISTEN ROUTES 
+    // ASISTEN ROUTES
     // =====================================================
     Route::middleware(['role:asisten', 'not_finalized'])->group(function () {
 
@@ -120,12 +121,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // =====================================================
     Route::middleware(['role:mahasiswa'])->group(function () {
 
-        Route::post('/group/{group}/members/{member}/qualification',
+        Route::post(
+            '/group/{group}/members/{member}/qualification',
             [QualificationController::class, 'store']
         )->middleware('not_finalized');
 
         Route::get('/dashboard/mahasiswa', [DashboardController::class, 'mahasiswa']);
     });
-
 });
-
